@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VECTORHEART // ART ARCHIVE</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="ui-scanner"></div>
+<div class="crt-noise"></div>
+
+<div class="danger-marquee top-marquee">
+  <div class="marquee-content">
+    // ADVERTENCIA: CONTENIDO VECTORIAL ALTAMENTE VOLÁTIL // ACCESO RESTRINGIDO // SISTEMA DE ARCHIVOS UPS_V.2 // ADVERTENCIA: CONTENIDO VECTORIAL ALTAMENTE VOLÁTIL // ACCESO RESTRINGIDO // SISTEMA DE ARCHIVOS UPS_V.2 //
+  </div>
+</div>
+
+<header>
+  <nav class="nav-container">
+    <button class="menu-toggle" id="menuBtn" data-target="true">
+      <span class="v-icon">V</span>
+    </button>
+    <div class="logo">VECTOR<span class="highlight">HEART</span></div>
+    <a href="#" class="cart-link" data-target="true">CARRITO (0)</a>
+  </nav>
+</header>
+
+<div class="side-menu" id="sideMenu">
+  <button class="close-menu" id="closeMenuBtn" data-target="true">X</button>
+  <ul class="menu-links">
+    <li>
+      <a href="#" data-target="true">[ CATÁLOGO ]</a>
+      <ul class="submenu">
+        <li><a href="#" data-target="true">>> Artistas</a></li>
+        <li><a href="#" data-target="true">>> Exposiciones</a></li>
+        <li><a href="#" data-target="true">>> Publicaciones</a></li>
+      </ul>
+    </li>
+    <li><a href="#" data-target="true">[ VISIÓN ]</a></li>
+    <li><a href="#" data-target="true">[ TIENDA ]</a></li>
+    <li><a href="#" data-target="true">[ CONTACTO ]</a></li>
+  </ul>
+  <div class="menu-footer">
+    <p>SISTEMA UPS_V.2</p>
+    <p>LOC: QUITO, EC</p>
+  </div>
+</div>
+
+<main>
+  <section class="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-content">
+      <h2 class="pre-title">ACCESO AUTORIZADO</h2>
+      <h1 class="glitch-text">SISTEMA DE ARTE VECTORIAL</h1>
+      <div class="tech-sub-container">
+        <p class="tech-sub">STATUS: ONLINE // VERSIÓN 2.0.46</p>
+        <p class="tech-sub blinking">ESPERANDO COMANDO_</p>
+      </div>
+      <button class="btn-primary" data-target="true">INICIAR_SECUENCIA >></button>
+    </div>
+    <div class="hero-decoration">
+      <div class="crosshair-bg">+</div>
+      <div class="hero-stats">
+        <span>SYS.LOAD: 45%</span>
+        <span>NET.PING: 12ms</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="catalog">
+    <h2 class="section-title">// TIENDA_ACTIVA</h2>
+    <div class="product-grid" id="catalog-grid">
+    </div>
+  </section>
+</main>
+
+<div class="modal-overlay" id="artModal">
+  <div class="modal-content">
+    <button class="modal-close" id="closeModalBtn" data-target="true">X</button>
+    <div class="modal-layout">
+      <div class="modal-image-container">
+        <div class="modal-image" id="modalImage"></div>
+        <div class="scan-line"></div>
+      </div>
+      <div class="modal-info">
+        <h2 id="modalTitle">TITULO_OBRA</h2>
+        <p class="modal-data">ARTISTA: <span id="modalArtist">...</span></p>
+        <p class="modal-data">EXPOSICIONES: <span id="modalExhibitions">...</span></p>
+        <div class="modal-rating" id="modalRating">★★★★★</div>
+        <p class="modal-desc" id="modalDesc">Cargando registro de datos...</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-header">
+    <h2>// REGISTRO_DE_COMPRAS</h2>
+    <button class="close-cart" id="closeCartBtn" data-target="true">X</button>
+  </div>
+  <div class="cart-items-container" id="cartItemsContainer">
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">TOTAL: $<span id="cartTotalValue">0.00</span></div>
+    <button class="btn-primary" style="width: 100%; margin-top: 15px;" data-target="true">PROCESAR_PAGO >></button>
+  </div>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>
