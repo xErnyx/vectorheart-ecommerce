@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-  console.log("%c[SYSTEM BOOT] Vectorheart V.2 // SISTEMA ESTABLE.", "color: #E60000; font-family: monospace; font-size: 14px; font-weight: bold;");
+  console.log("%c[SYSTEM BOOT] Vectorheart V.2 // MODO_HIBRIDO_ESTABLE.", "color: #E60000; font-family: monospace; font-size: 14px; font-weight: bold;");
 
-  // --- 1. CURSOR ---
+  // --- 1. CURSOR UNIVERSAL ---
   const cursor = document.createElement('div');
   cursor.id = 'custom-cursor';
   cursor.innerHTML = '<div id="cursor-coords">X:0 Y:0</div>';
@@ -30,12 +30,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   attachCursorHover(document.querySelectorAll('a, button, [data-target="true"]'));
 
-  // --- 2. MENÚ LATERAL ---
+  // --- 2. MENÚ LATERAL (Seguro) ---
   const menuBtn = document.getElementById('menuBtn');
   const closeMenuBtn = document.getElementById('closeMenuBtn');
   const sideMenu = document.getElementById('sideMenu');
-  menuBtn.addEventListener('click', () => sideMenu.classList.add('active'));
-  closeMenuBtn.addEventListener('click', () => sideMenu.classList.remove('active'));
+  const tiendaLink = document.getElementById('tiendaLink');
+
+  if (menuBtn && sideMenu) {
+    menuBtn.addEventListener('click', () => sideMenu.classList.add('active'));
+  }
+  if (closeMenuBtn && sideMenu) {
+    closeMenuBtn.addEventListener('click', () => sideMenu.classList.remove('active'));
+  }
+  if (tiendaLink && sideMenu) {
+    tiendaLink.addEventListener('click', () => sideMenu.classList.remove('active'));
+  }
 
   // --- 3. BASE DE DATOS ---
   const artDatabase = [
@@ -47,49 +56,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- 4. MEMORIA LOCAL Y RENDERIZADO DEL PANEL DEL CARRITO ---
   let cart = JSON.parse(localStorage.getItem('vh_cart_items')) || [];
+
   const cartLink = document.querySelector('.cart-link');
   const cartPanel = document.getElementById('cartPanel');
   const closeCartBtn = document.getElementById('closeCartBtn');
   const cartItemsContainer = document.getElementById('cartItemsContainer');
   const cartTotalValue = document.getElementById('cartTotalValue');
 
-  // Abrir/Cerrar panel de carrito
-  cartLink.addEventListener('click', (e) => { e.preventDefault(); cartPanel.classList.add('active'); });
-  closeCartBtn.addEventListener('click', () => cartPanel.classList.remove('active'));
-
-  // Actualizar UI del carrito completo
+  // Actualizar UI del carrito completo (Seguro)
   function updateCartUI() {
-    cartLink.textContent = `CARRITO (${cart.length})`;
-    localStorage.setItem('vh_cart_items', JSON.stringify(cart));
-
-    // Dibujar los productos en el panel lateral
-    cartItemsContainer.innerHTML = '';
-    let total = 0;
-
-    if(cart.length === 0) {
-      cartItemsContainer.innerHTML = '<p style="color:#666; font-family:monospace; margin-top:20px;">[ SISTEMA_VACÍO ]</p>';
-    }
-
-    cart.forEach((productId, index) => {
-      const product = artDatabase.find(p => p.id === productId);
-      if(product) {
-        total += product.price;
-        const itemHTML = `
-                <div class="cart-item">
-                    <img src="${product.image}" alt="${product.title}">
-                    <div class="cart-item-info">
-                        <h4>${product.title}</h4>
-                        <p>$${product.price.toFixed(2)}</p>
-                    </div>
-                    <button class="remove-item-btn" data-index="${index}" data-target="true">[ X ]</button>
-                </div>
-            `;
-        cartItemsContainer.innerHTML += itemHTML;
+    if (cartPanel && cartLink) {
+      // Evitamos sobrescribir el botón "<< VOLVER" de la página de misión
+      if (cartLink.textContent.includes('CARRITO') || cartLink.textContent.includes('0')) {
+        cartLink.textContent = `CARRITO (${cart.length})`;
       }
-    });
 
-    cartTotalValue.textContent = total.toFixed(2);
-    attachRemoveLogic(); // Damos vida a los botones de borrar
+      localStorage.setItem('vh_cart_items', JSON.stringify(cart));
+      cartItemsContainer.innerHTML = '';
+      let total = 0;
+
+      if(cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p style="color:#666; font-family:monospace; margin-top:20px;">[ SISTEMA_VACÍO ]</p>';
+      }
+
+      cart.forEach((productId, index) => {
+        const product = artDatabase.find(p => p.id === productId);
+        if(product) {
+          total += product.price;
+          const itemHTML = `
+                  <div class="cart-item">
+                      <img src="${product.image}" alt="${product.title}">
+                      <div class="cart-item-info">
+                          <h4>${product.title}</h4>
+                          <p>$${product.price.toFixed(2)}</p>
+                      </div>
+                      <button class="remove-item-btn" data-index="${index}" data-target="true">[ X ]</button>
+                  </div>
+              `;
+          cartItemsContainer.innerHTML += itemHTML;
+        }
+      });
+
+      cartTotalValue.textContent = total.toFixed(2);
+      attachRemoveLogic();
+    } else {
+      // Si no hay panel, solo actualiza la memoria interna
+      localStorage.setItem('vh_cart_items', JSON.stringify(cart));
+    }
   }
 
   // Lógica para borrar un ítem
@@ -99,68 +112,81 @@ document.addEventListener('DOMContentLoaded', () => {
     removeBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         const itemIndex = btn.getAttribute('data-index');
-        cart.splice(itemIndex, 1); // Borramos 1 elemento en ese índice
-        updateCartUI(); // Volvemos a dibujar
-      });
-    });
-  }
-
-  // --- 5. RENDERIZADO DEL CATÁLOGO ---
-  const catalogGrid = document.getElementById('catalog-grid');
-  function renderCatalog() {
-    catalogGrid.innerHTML = '';
-    artDatabase.forEach(product => {
-      const isNew = product.status === 'NUEVO' ? '<span style="color:white; font-family:var(--font-title); font-size: 2rem; position:absolute; top:10px; left:10px; background:var(--primary); padding:2px 8px; z-index:20;">[NEW]</span>' : '';
-      const cardHTML = `
-                <div class="product-card">
-                    <div class="card-header"><span class="serial">#${product.id}</span><span class="status-dot"></span></div>
-                    <div class="product-image modal-trigger" data-id="${product.id}" data-target="true">
-                        <img src="${product.image}" alt="${product.title}" class="real-art-img">
-                        ${isNew}
-                        <div class="scan-overlay">INSPECCIONAR</div>
-                    </div>
-                    <div class="product-info">
-                        <h3>${product.title}</h3><p class="price">$${product.price.toFixed(2)}</p>
-                        <button class="add-btn" data-id="${product.id}" data-target="true">AÑADIR_AL_SISTEMA</button>
-                    </div>
-                </div>
-            `;
-      catalogGrid.innerHTML += cardHTML;
-    });
-
-    attachCartAddLogic();
-    attachModalLogic();
-  }
-
-  // Lógica de los botones "AÑADIR AL SISTEMA"
-  function attachCartAddLogic() {
-    const addButtons = document.querySelectorAll('.add-btn');
-    attachCursorHover(addButtons);
-    addButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const productId = button.getAttribute('data-id');
-        cart.push(productId);
+        cart.splice(itemIndex, 1);
         updateCartUI();
-
-        // Efecto visual y abrir panel
-        const originalText = button.textContent;
-        const card = button.closest('.product-card');
-        button.textContent = '[ DATOS_GUARDADOS ]';
-        button.style.backgroundColor = 'var(--secondary)';
-        card.style.borderColor = 'var(--secondary)';
-
-        cartPanel.classList.add('active'); // Abrimos el carrito para que vea su compra
-
-        setTimeout(() => {
-          button.textContent = originalText;
-          button.style.backgroundColor = 'var(--dark)';
-          card.style.borderColor = 'var(--dark)';
-        }, 1000);
       });
     });
   }
 
-  // --- 6. MODAL DE INSPECCIÓN ---
+  // Abrir/Cerrar panel de carrito (Solo si existen)
+  if (cartLink && cartPanel && closeCartBtn) {
+    cartLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      cartPanel.classList.add('active');
+    });
+    closeCartBtn.addEventListener('click', () => cartPanel.classList.remove('active'));
+  }
+
+  // --- 5. RENDERIZADO DEL CATÁLOGO (Solo en index.html) ---
+  const catalogGrid = document.getElementById('catalog-grid');
+
+  if (catalogGrid) {
+    function renderCatalog() {
+      catalogGrid.innerHTML = '';
+      artDatabase.forEach(product => {
+        const isNew = product.status === 'NUEVO' ? '<span style="color:white; font-family:var(--font-title); font-size: 2rem; position:absolute; top:10px; left:10px; background:var(--primary); padding:2px 8px; z-index:20;">[NEW]</span>' : '';
+        const cardHTML = `
+                  <div class="product-card">
+                      <div class="card-header"><span class="serial">#${product.id}</span><span class="status-dot"></span></div>
+                      <div class="product-image modal-trigger" data-id="${product.id}" data-target="true">
+                          <img src="${product.image}" alt="${product.title}" class="real-art-img">
+                          ${isNew}
+                          <div class="scan-overlay">INSPECCIONAR</div>
+                      </div>
+                      <div class="product-info">
+                          <h3>${product.title}</h3><p class="price">$${product.price.toFixed(2)}</p>
+                          <button class="add-btn" data-id="${product.id}" data-target="true">AÑADIR_AL_SISTEMA</button>
+                      </div>
+                  </div>
+              `;
+        catalogGrid.innerHTML += cardHTML;
+      });
+
+      attachCartAddLogic();
+      attachModalLogic();
+    }
+
+    // Lógica de los botones "AÑADIR AL SISTEMA"
+    function attachCartAddLogic() {
+      const addButtons = document.querySelectorAll('.add-btn');
+      attachCursorHover(addButtons);
+      addButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const productId = button.getAttribute('data-id');
+          cart.push(productId);
+          updateCartUI();
+
+          const originalText = button.textContent;
+          const card = button.closest('.product-card');
+          button.textContent = '[ DATOS_GUARDADOS ]';
+          button.style.backgroundColor = 'var(--secondary)';
+          card.style.borderColor = 'var(--secondary)';
+
+          if (cartPanel) cartPanel.classList.add('active');
+
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.style.backgroundColor = 'var(--dark)';
+            card.style.borderColor = 'var(--dark)';
+          }, 1000);
+        });
+      });
+    }
+
+    renderCatalog();
+  }
+
+  // --- 6. MODAL DE INSPECCIÓN (Solo si existe) ---
   const modal = document.getElementById('artModal');
   const closeModalBtn = document.getElementById('closeModalBtn');
 
@@ -173,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const productId = trigger.getAttribute('data-id');
         const product = artDatabase.find(p => p.id === productId);
 
-        if (product) {
+        if (product && modal) {
           document.getElementById('modalTitle').textContent = product.title;
           document.getElementById('modalArtist').textContent = product.artist;
           document.getElementById('modalExhibitions').textContent = product.exhibitions;
@@ -190,9 +216,45 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
+  if (closeModalBtn && modal) {
+    closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
+  }
+  // --- 7. MODO TÁCTICO: CERRAR CON TECLA ESCAPE ---
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      // 1. Cerrar Menú Lateral
+      if (sideMenu && sideMenu.classList.contains('active')) {
+        sideMenu.classList.remove('active');
+      }
+      // 2. Cerrar Carrito de Compras
+      if (cartPanel && cartPanel.classList.contains('active')) {
+        cartPanel.classList.remove('active');
+      }
+      // 3. Cerrar el Modal (Ventana de inspección de arte)
+      if (modal && modal.classList.contains('active')) {
+        modal.classList.remove('active');
+      }
+    }
+  });
 
   // --- INICIO DEL SISTEMA ---
-  renderCatalog();
   updateCartUI();
+
+  // --- 7. MODO TÁCTICO: CERRAR CON TECLA ESCAPE ---
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      // 1. Cerrar Menú Lateral
+      if (sideMenu && sideMenu.classList.contains('active')) {
+        sideMenu.classList.remove('active');
+      }
+      // 2. Cerrar Carrito de Compras
+      if (cartPanel && cartPanel.classList.contains('active')) {
+        cartPanel.classList.remove('active');
+      }
+      // 3. Cerrar el Modal (Ventana de inspección de arte)
+      if (modal && modal.classList.contains('active')) {
+        modal.classList.remove('active');
+      }
+    }
+  });
 });

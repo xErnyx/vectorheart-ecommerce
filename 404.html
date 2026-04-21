@@ -1,62 +1,76 @@
-<!doctype html>
-<html lang="en">
-
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta charset="utf-8">
-  <title>Page Not Found</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VECTORHEART // ERROR 404</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    * {
-      line-height: 1.2;
-      margin: 0;
-    }
-
-    html {
-      color: #888;
-      display: table;
-      font-family: sans-serif;
-      height: 100%;
+    /* Estilos específicos para la página de error que se suman a tu CSS */
+    .error-container {
+      height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      width: 100%;
+      border: 4px dashed var(--primary);
+      margin: 40px 10%;
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(0, 0, 0, 0.02),
+        rgba(0, 0, 0, 0.02) 10px,
+        rgba(230, 0, 0, 0.05) 10px,
+        rgba(230, 0, 0, 0.05) 20px
+      );
     }
-
-    body {
-      display: table-cell;
-      vertical-align: middle;
-      margin: 2em auto;
-    }
-
-    h1 {
-      color: #555;
-      font-size: 2em;
-      font-weight: 400;
-    }
-
-    p {
-      margin: 0 auto;
-      width: 280px;
-    }
-
-    @media only screen and (max-width: 280px) {
-
-      body,
-      p {
-        width: 95%;
-      }
-
-      h1 {
-        font-size: 1.5em;
-        margin: 0 0 0.3em;
-      }
-
-    }
+    .error-code { font-family: var(--font-title); font-size: 10rem; color: var(--primary); line-height: 0.8; text-shadow: 5px 5px 0px var(--dark); }
+    .error-msg { font-size: 1.5rem; font-weight: bold; margin: 20px 0; background: var(--dark); color: white; padding: 10px 20px; }
+    .btn-return { margin-top: 30px; text-decoration: none; display: inline-block; }
   </style>
 </head>
-
 <body>
-  <h1>Page Not Found</h1>
-  <p>Sorry, but the page you were trying to view does not exist.</p>
-</body>
 
+<div class="ui-scanner"></div>
+<div class="crt-noise"></div>
+
+<div class="danger-marquee top-marquee">
+  <div class="marquee-content">
+    // ALERTA DE SISTEMA // DIRECTORIO NO ENCONTRADO // SECTOR EN CONSTRUCCIÓN // ALERTA DE SISTEMA // DIRECTORIO NO ENCONTRADO //
+  </div>
+</div>
+
+<div id="custom-cursor"><div id="cursor-coords">X:0 Y:0</div></div>
+
+<main>
+  <div class="error-container">
+    <h1 class="error-code">404</h1>
+    <p class="error-msg">[ SECTOR EN DESARROLLO // DATOS RESTRINGIDOS ]</p>
+    <p style="max-width: 500px; color: #666;">El nodo al que intentas acceder está siendo construido por los administradores del sistema UPS_V.2 o la ruta ha sido corrompida.</p>
+
+    <a href="index.html" class="btn-primary btn-return" data-target="true"><< VOLVER AL NODO PRINCIPAL</a>
+  </div>
+</main>
+
+<script>
+  // Lógica súper básica solo para que el cursor funcione en esta página
+  const cursor = document.getElementById('custom-cursor');
+  const coords = document.getElementById('cursor-coords');
+  document.addEventListener('mousemove', (e) => {
+    cursor.style.left = `${e.clientX}px`; cursor.style.top = `${e.clientY}px`;
+    coords.textContent = `X:${e.clientX} Y:${e.clientY}`;
+  });
+  document.querySelectorAll('a').forEach(target => {
+    target.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%, -50%) scale(1.5) rotate(45deg)';
+      cursor.style.borderColor = 'var(--secondary)';
+    });
+    target.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%, -50%) scale(1) rotate(0deg)';
+      cursor.style.borderColor = 'var(--primary)';
+    });
+  });
+</script>
+</body>
 </html>
-<!-- IE needs 512+ bytes: https://docs.microsoft.com/archive/blogs/ieinternals/friendly-http-error-pages -->

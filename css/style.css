@@ -51,21 +51,299 @@ header { background: var(--dark); color: white; padding: 15px 5%; position: rela
 .submenu a:hover { color: white; }
 .menu-footer { color: var(--primary); font-size: 0.8rem; border-top: 1px solid #333; padding-top: 20px; }
 
-/* HERO */
-.hero { height: 70vh; display: flex; align-items: center; padding: 0 10%; position: relative; background: var(--gray); overflow: hidden; border-bottom: 2px solid var(--dark); }
-.hero-bg-grid { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(var(--dark) 1px, transparent 1px), linear-gradient(90deg, var(--dark) 1px, transparent 1px); background-size: 40px 40px; opacity: 0.05; z-index: 0; }
-.hero-content { position: relative; z-index: 10; max-width: 800px; }
-.pre-title { color: var(--primary); font-size: 1.2rem; margin-bottom: 10px; }
-.glitch-text { font-family: var(--font-title); font-size: 7rem; line-height: 0.85; margin-bottom: 20px; color: var(--dark); text-transform: uppercase;}
-.tech-sub-container { background: var(--dark); color: white; padding: 15px; display: inline-block; border-left: 4px solid var(--primary); margin-bottom: 30px; }
-.tech-sub { margin-bottom: 5px; }
-.blinking { animation: blink 1s step-end infinite; color: var(--secondary); }
-@keyframes blink { 50% { opacity: 0; } }
-.btn-primary { background: var(--primary); color: white; border: none; padding: 15px 40px; font-family: var(--font-tech); font-weight: bold; font-size: 1.1rem; clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px); transition: 0.3s; }
-.btn-primary:hover { background: var(--dark); transform: scale(1.05); }
-.hero-decoration { position: absolute; right: 10%; top: 50%; transform: translateY(-50%); text-align: right; z-index: 5; }
-.crosshair-bg { font-size: 15rem; color: var(--primary); opacity: 0.1; line-height: 1; }
-.hero-stats { display: flex; flex-direction: column; gap: 5px; color: #666; font-size: 0.8rem; font-weight: bold; margin-top: -40px; }
+/* --- HERO DE ALTO IMPACTO --- */
+.hero {
+  height: 85vh; /* Lo hacemos más alto para que ocupe casi toda la pantalla */
+  display: flex;
+  align-items: center;
+  padding: 0 5%;
+  position: relative;
+  background: var(--dark); /* FONDO OSCURO PARA EL BOOM */
+  overflow: hidden;
+  border-bottom: 4px solid var(--primary);
+}
+
+/* El Arte Gigante a la Derecha */
+.hero-art-display {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 55%;
+  height: 100%;
+  /* Corte diagonal agresivo estilo Wipeout/Cyberpunk */
+  clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+  border-left: 5px solid var(--primary);
+  z-index: 1;
+}
+
+.hero-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.2) grayscale(0.2);
+  opacity: 0.6; /* Un poco opaco para no ahogar el texto */
+  transition: filter 0.5s, transform 5s ease-out;
+}
+
+/* Al pasar el mouse, el arte "despierta" */
+.hero:hover .hero-main-img {
+  filter: contrast(1.3) grayscale(0) saturate(1.5);
+  transform: scale(1.05);
+}
+
+.hero-scanline {
+  position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+  background: rgba(230, 0, 0, 0.7);
+  box-shadow: 0 0 20px var(--primary);
+  animation: scanVertical 3s linear infinite;
+}
+
+.hero-glitch-overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background-image: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+/* --- Contenido Principal Izquierdo (Minimalista) --- */
+.hero-content.minimalist-hero {
+  position: relative;
+  z-index: 10;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centra el contenido verticalmente */
+  padding-left: 10%; /* Lo empuja un poco más a la derecha */
+}
+
+.glitch-title {
+  font-family: var(--font-title);
+  font-size: 10rem; /* Aún más gigante */
+  line-height: 0.85;
+  margin-bottom: 40px; /* Espacio para respirar hasta el botón */
+  color: white;
+  text-shadow: 8px 8px 0px var(--primary); /* Sombra más gruesa */
+  letter-spacing: 2px;
+}
+
+/* El Nuevo Botón EXPLORAR */
+.btn-explore {
+  font-family: var(--font-tech);
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary);
+  background: transparent;
+  border: 3px solid var(--primary);
+  padding: 15px 40px;
+  letter-spacing: 5px;
+  width: fit-content;
+  box-shadow: 6px 6px 0px rgba(230, 0, 0, 0.3);
+  transition: all 0.2s ease-out;
+}
+
+.btn-explore:hover {
+  background: var(--primary);
+  color: var(--dark);
+  box-shadow: 10px 10px 0px var(--dark), 12px 12px 0px var(--primary);
+  transform: translate(-4px, -4px);
+}
+
+@media (max-width: 1024px) {
+  .glitch-title { font-size: 7rem; }
+}
+
+@media (max-width: 768px) {
+  .hero-content.minimalist-hero { width: 100%; padding-left: 0; align-items: center; }
+  .glitch-title { font-size: 5rem; text-shadow: 4px 4px 0px var(--primary); text-align: center; }
+}
+
+.hero-badge {
+  background: var(--primary);
+  color: white;
+  padding: 5px 15px;
+  font-family: var(--font-tech);
+  font-size: 0.9rem;
+  font-weight: bold;
+  display: inline-block;
+  margin-bottom: 15px;
+  transform: skewX(-10deg);
+}
+
+.glitch-title {
+  font-family: var(--font-title);
+  font-size: 8rem; /* TÍTULO GIGANTE */
+  line-height: 0.85;
+  margin-bottom: 10px;
+  color: white;
+  text-shadow: 5px 5px 0px var(--primary); /* Sombra roja sólida dura */
+  letter-spacing: 2px;
+}
+
+.hero-subtitle {
+  font-family: var(--font-tech);
+  font-size: 1.2rem;
+  color: #aaa;
+  margin-bottom: 30px;
+  letter-spacing: -0.5px;
+}
+
+/* Ajustes a la caja técnica para el fondo oscuro */
+.tech-sub-container {
+  background: rgba(17, 17, 17, 0.9);
+  border: 1px solid #333;
+  border-left: 4px solid var(--primary);
+  box-shadow: 5px 5px 0px rgba(230, 0, 0, 0.2);
+}
+
+/* Decoración Inferior */
+.hero-decoration {
+  position: absolute; bottom: 20px; left: 10%; z-index: 5;
+}
+
+.hero-stats {
+  display: flex; gap: 20px; font-family: var(--font-tech);
+  font-size: 0.85rem; color: #555; font-weight: bold;
+}
+
+.highlight-stat { color: var(--primary); }
+
+@media (max-width: 1024px) {
+  .glitch-title { font-size: 6rem; }
+  .hero-content { width: 60%; }
+}
+
+@media (max-width: 768px) {
+  .hero-art-display { width: 100%; clip-path: none; opacity: 0.2; z-index: 0; }
+  .hero-content { width: 100%; padding-left: 0; text-align: center; display: flex; flex-direction: column; align-items: center;}
+  .glitch-title { font-size: 5rem; text-shadow: 3px 3px 0px var(--primary); }
+  .hero-decoration { display: none; }
+}
+
+/* --- HERO DE ALTO IMPACTO --- */
+.hero {
+  height: 85vh; /* Lo hacemos más alto para que ocupe casi toda la pantalla */
+  display: flex;
+  align-items: center;
+  padding: 0 5%;
+  position: relative;
+  background: var(--dark); /* FONDO OSCURO PARA EL BOOM */
+  overflow: hidden;
+  border-bottom: 4px solid var(--primary);
+}
+
+/* El Arte Gigante a la Derecha */
+.hero-art-display {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 55%;
+  height: 100%;
+  /* Corte diagonal agresivo estilo Wipeout/Cyberpunk */
+  clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+  border-left: 5px solid var(--primary);
+  z-index: 1;
+}
+
+.hero-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.2) grayscale(0.2);
+  opacity: 0.6; /* Un poco opaco para no ahogar el texto */
+  transition: filter 0.5s, transform 5s ease-out;
+}
+
+/* Al pasar el mouse, el arte "despierta" */
+.hero:hover .hero-main-img {
+  filter: contrast(1.3) grayscale(0) saturate(1.5);
+  transform: scale(1.05);
+}
+
+.hero-scanline {
+  position: absolute; top: 0; left: 0; width: 100%; height: 5px;
+  background: rgba(230, 0, 0, 0.7);
+  box-shadow: 0 0 20px var(--primary);
+  animation: scanVertical 3s linear infinite;
+}
+
+.hero-glitch-overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background-image: linear-gradient(transparent 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+/* Contenido Principal Izquierdo */
+.hero-content {
+  position: relative;
+  z-index: 10;
+  width: 50%; /* Evita que el texto pise la imagen */
+  color: white; /* Texto blanco sobre fondo negro */
+  padding-left: 5%;
+}
+
+.hero-badge {
+  background: var(--primary);
+  color: white;
+  padding: 5px 15px;
+  font-family: var(--font-tech);
+  font-size: 0.9rem;
+  font-weight: bold;
+  display: inline-block;
+  margin-bottom: 15px;
+  transform: skewX(-10deg);
+}
+
+.glitch-title {
+  font-family: var(--font-title);
+  font-size: 8rem; /* TÍTULO GIGANTE */
+  line-height: 0.85;
+  margin-bottom: 10px;
+  color: white;
+  text-shadow: 5px 5px 0px var(--primary); /* Sombra roja sólida dura */
+  letter-spacing: 2px;
+}
+
+.hero-subtitle {
+  font-family: var(--font-tech);
+  font-size: 1.2rem;
+  color: #aaa;
+  margin-bottom: 30px;
+  letter-spacing: -0.5px;
+}
+
+/* Ajustes a la caja técnica para el fondo oscuro */
+.tech-sub-container {
+  background: rgba(17, 17, 17, 0.9);
+  border: 1px solid #333;
+  border-left: 4px solid var(--primary);
+  box-shadow: 5px 5px 0px rgba(230, 0, 0, 0.2);
+}
+
+/* Decoración Inferior */
+.hero-decoration {
+  position: absolute; bottom: 20px; left: 10%; z-index: 5;
+}
+
+.hero-stats {
+  display: flex; gap: 20px; font-family: var(--font-tech);
+  font-size: 0.85rem; color: #555; font-weight: bold;
+}
+
+.highlight-stat { color: var(--primary); }
+
+@media (max-width: 1024px) {
+  .glitch-title { font-size: 6rem; }
+  .hero-content { width: 60%; }
+}
+
+@media (max-width: 768px) {
+  .hero-art-display { width: 100%; clip-path: none; opacity: 0.2; z-index: 0; }
+  .hero-content { width: 100%; padding-left: 0; text-align: center; display: flex; flex-direction: column; align-items: center;}
+  .glitch-title { font-size: 5rem; text-shadow: 3px 3px 0px var(--primary); }
+  .hero-decoration { display: none; }
+}
 
 /* CATÁLOGO */
 .catalog { padding: 80px 10%; }
@@ -203,3 +481,68 @@ header { background: var(--dark); color: white; padding: 15px 5%; position: rela
 .cart-total { font-family: var(--font-title); font-size: 2.5rem; display: flex; justify-content: space-between; align-items: center;}
 
 @media (max-width: 768px) { .cart-panel { width: 100%; right: -100%; } }
+
+/* --- ESTILOS PÁGINA MISIÓN --- */
+.mision-container { padding: 100px 10%; color: var(--dark); }
+.story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-top: 40px; }
+.art-frame { border: 2px solid var(--primary); padding: 5px; margin-bottom: 20px; transform: rotate(-2deg); }
+.art-frame img { width: 100%; filter: contrast(1.1); }
+
+/* --- FOOTER TÁCTICO MEJORADO --- */
+.main-footer { background: var(--dark); color: white; padding: 40px 10%; border-top: 4px solid var(--primary); }
+.footer-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+
+/* El Marco del Mapa */
+.footer-map-container { display: flex; flex-direction: column; }
+.map-header { background: var(--primary); color: white; padding: 5px 10px; font-family: var(--font-tech); font-size: 0.8rem; font-weight: bold; width: fit-content; border: 1px solid var(--primary); }
+.map-frame { position: relative; border: 2px solid var(--primary); padding: 5px; background: #222; }
+
+/* El Escudo del Cursor (Evita que se trabe) */
+.map-shield { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; /* Permite el paso del ratón visual pero evita la interacción */ }
+/* Si quieres que el usuario pueda mover el mapa, añade esto al final de app.js:
+   document.querySelector('.map-shield').addEventListener('click', function() { this.style.pointerEvents = 'none'; }); */
+
+/* Información Corporativa */
+.footer-info { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+.footer-branding { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.v-logo { background: var(--primary); color: white; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-family: var(--font-title); font-size: 1.2rem; border-radius: 2px; }
+.footer-branding h2 { font-family: var(--font-title); font-size: 2.5rem; letter-spacing: 2px; line-height: 1; }
+
+.copyright { color: #aaa; font-size: 0.9rem; margin-bottom: 5px; }
+.update-date { font-size: 0.75rem; color: #666; font-family: var(--font-tech); margin-bottom: 20px; }
+
+/* Selector de Idiomas */
+.lang-selector { display: flex; gap: 10px; }
+.lang-btn { background: transparent; border: 1px solid #666; color: #666; padding: 5px 15px; font-family: var(--font-tech); font-weight: bold; transition: 0.3s; }
+.lang-btn:hover { border-color: white; color: white; }
+.lang-btn.active { background: var(--primary); border-color: var(--primary); color: white; }
+
+/* Redes en el Menú Lateral */
+.side-socials { display: flex; gap: 15px; margin-bottom: 15px; border-bottom: 1px dashed #444; padding-bottom: 15px; }
+.side-socials a { color: var(--secondary); font-family: var(--font-tech); font-weight: bold; font-size: 1.1rem; text-decoration: none; transition: 0.2s; }
+.side-socials a:hover { color: white; transform: translateY(-2px); }
+
+@media (max-width: 768px) {
+  .footer-layout { grid-template-columns: 1fr; }
+  .footer-info { align-items: flex-start; text-align: left; margin-top: 20px; }
+}
+
+/* --- FIX: BOTÓN DE PROCESAR PAGO --- */
+.cart-footer .btn-primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 15px;
+  font-family: var(--font-tech);
+  font-size: 1.2rem;
+  font-weight: bold;
+  width: 100%;
+  margin-top: 15px;
+  clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+  transition: background 0.3s, color 0.3s;
+}
+
+.cart-footer .btn-primary:hover {
+  background: white;
+  color: var(--dark);
+}

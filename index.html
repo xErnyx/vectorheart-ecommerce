@@ -31,19 +31,17 @@
 <div class="side-menu" id="sideMenu">
   <button class="close-menu" id="closeMenuBtn" data-target="true">X</button>
   <ul class="menu-links">
-    <li>
-      <a href="#" data-target="true">[ CATÁLOGO ]</a>
-      <ul class="submenu">
-        <li><a href="#" data-target="true">>> Artistas</a></li>
-        <li><a href="#" data-target="true">>> Exposiciones</a></li>
-        <li><a href="#" data-target="true">>> Publicaciones</a></li>
-      </ul>
-    </li>
-    <li><a href="#" data-target="true">[ VISIÓN ]</a></li>
-    <li><a href="#" data-target="true">[ TIENDA ]</a></li>
-    <li><a href="#" data-target="true">[ CONTACTO ]</a></li>
+    <li><a href="index.html" data-target="true">[ INICIO ]</a></li>
+    <li><a href="mision.html" data-target="true">[ MISION ]</a></li> <li><a href="#catalog-grid" data-target="true" id="tiendaLink">[ TIENDA_ACTIVA ]</a></li>
+    <li><a href="404.html" data-target="true">[ SERVICIOS ]</a></li>
+    <li><a href="404.html" data-target="true">[ CONTACTO ]</a></li>
   </ul>
   <div class="menu-footer">
+    <div class="side-socials">
+      <a href="#" data-target="true">[ FB ]</a>
+      <a href="#" data-target="true">[ IG ]</a>
+      <a href="#" data-target="true">[ TK ]</a>
+    </div>
     <p>SISTEMA UPS_V.2</p>
     <p>LOC: QUITO, EC</p>
   </div>
@@ -51,22 +49,18 @@
 
 <main>
   <section class="hero">
-    <div class="hero-bg-grid"></div>
-    <div class="hero-content">
-      <h2 class="pre-title">ACCESO AUTORIZADO</h2>
-      <h1 class="glitch-text">SISTEMA DE ARTE VECTORIAL</h1>
-      <div class="tech-sub-container">
-        <p class="tech-sub">STATUS: ONLINE // VERSIÓN 2.0.46</p>
-        <p class="tech-sub blinking">ESPERANDO COMANDO_</p>
-      </div>
-      <button class="btn-primary" data-target="true">INICIAR_SECUENCIA >></button>
+    <div class="hero-art-display">
+      <img src="assets/img/obra5.jpg" alt="Art Showcase" class="hero-main-img">
+      <div class="hero-scanline"></div>
+      <div class="hero-glitch-overlay"></div>
     </div>
-    <div class="hero-decoration">
-      <div class="crosshair-bg">+</div>
-      <div class="hero-stats">
-        <span>SYS.LOAD: 45%</span>
-        <span>NET.PING: 12ms</span>
-      </div>
+
+    <div class="hero-content minimalist-hero">
+      <h1 class="glitch-title">VECTOR<br>HEART</h1>
+
+      <button class="btn-explore" data-target="true" onclick="document.getElementById('catalog-grid').scrollIntoView({behavior: 'smooth', block: 'start'})">
+        [ EXPLORAR ]
+      </button>
     </div>
   </section>
 
@@ -109,4 +103,34 @@
 </div>
 <script src="js/app.js"></script>
 </body>
+<footer class="main-footer">
+  <div class="footer-layout">
+    <div class="footer-map-container">
+      <div class="map-header">// COORDENADAS_DE_SISTEMA: UPS_SUR</div>
+      <div class="map-frame">
+        <div class="map-shield"></div>
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.721458364121!2d-78.55041068524658!3d-0.2825319997939148!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x91d598e37e96b3a3%3A0x7d0a273299723011!2sUniversidad%20Polit%C3%A9cnica%20Salesiana%20-%20Campus%20Sur!5e0!3m2!1ses!2sec!4v1713735000000!5m2!1ses!2sec"
+          width="100%" height="200" style="border:0; filter: grayscale(0.8) contrast(1.1);" allowfullscreen="">
+        </iframe>
+      </div>
+    </div>
+
+    <div class="footer-info">
+      <div class="footer-branding">
+        <span class="v-logo">V</span>
+        <h2>VECTOR<span class="highlight">HEART</span></h2>
+      </div>
+
+      <p class="copyright">© 2026 VECTORHEART</p>
+      <p class="update-date">ÚLTIMA_ACTUALIZACIÓN: 21/04/2026</p>
+
+      <div class="lang-selector">
+        <button class="lang-btn active" data-target="true">ES</button>
+        <button class="lang-btn" data-target="true">EN</button>
+        <button class="lang-btn" data-target="true">JP</button>
+      </div>
+    </div>
+  </div>
+</footer>
 </html>
