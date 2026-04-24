@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VECTORHEART // ERROR 404</title>
+
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
   <style>
-    /* Estilos específicos para la página de error que se suman a tu CSS */
     .error-container {
       height: 80vh;
       display: flex;
@@ -57,10 +58,15 @@
   // Lógica súper básica solo para que el cursor funcione en esta página
   const cursor = document.getElementById('custom-cursor');
   const coords = document.getElementById('cursor-coords');
+
+  // Seguimiento del ratón
   document.addEventListener('mousemove', (e) => {
-    cursor.style.left = `${e.clientX}px`; cursor.style.top = `${e.clientY}px`;
+    cursor.style.left = `${e.clientX}px`;
+    cursor.style.top = `${e.clientY}px`;
     coords.textContent = `X:${e.clientX} Y:${e.clientY}`;
   });
+
+  // Efecto Hover en los enlaces (Botón de volver)
   document.querySelectorAll('a').forEach(target => {
     target.addEventListener('mouseenter', () => {
       cursor.style.transform = 'translate(-50%, -50%) scale(1.5) rotate(45deg)';

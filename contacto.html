@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>VH // ENLACE DE COMUNICACIÓN</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="contacto-page">
+
+<div class="ui-scanner"></div>
+<div class="crt-noise"></div>
+
+<header>
+  <nav class="nav-container">
+    <div class="logo">VECTOR<span class="highlight">HEART</span></div>
+    <a href="index.html" class="cart-link" data-target="true"><< VOLVER</a>
+  </nav>
+</header>
+
+<main style="padding: 80px 10%; display: flex; justify-content: center;">
+  <div class="tech-panel" style="width: 100%; max-width: 600px; padding: 40px; background: white; border: 3px solid var(--dark); box-shadow: 10px 10px 0px var(--dark);">
+    <div class="article-header" style="background: var(--primary); color: white; padding: 5px 15px; font-weight: bold; width: fit-content; margin-bottom: 20px;">// TRANSMISIÓN_ENTRANTE</div>
+    <h1 class="glitch-title" style="font-size: 4rem; margin-bottom: 30px; color: var(--dark); text-shadow: 3px 3px 0px var(--primary);">CONTACTO</h1>
+
+    <form action="https://formspree.io/f/xyklobnn" method="POST">
+
+      <div style="margin-bottom: 25px;">
+        <label style="color: var(--primary); font-weight: bold; display: block; margin-bottom: 5px;">[ IDENTIFICACIÓN ]</label>
+        <input type="text" name="nombre" required placeholder="Ingresa tu nombre_usuario"
+               style="width: 100%; padding: 15px; background: var(--dark); border: 2px solid var(--primary); color: white; font-family: var(--font-tech); outline: none;">
+      </div>
+
+      <div style="margin-bottom: 25px;">
+        <label style="color: var(--primary); font-weight: bold; display: block; margin-bottom: 5px;">[ RED_DE_CONTACTO ]</label>
+        <input type="email" name="email" required placeholder="correo@sistema.com"
+               style="width: 100%; padding: 15px; background: var(--dark); border: 2px solid var(--primary); color: white; font-family: var(--font-tech); outline: none;">
+      </div>
+
+      <div style="margin-bottom: 25px;">
+        <label style="color: var(--primary); font-weight: bold; display: block; margin-bottom: 5px;">[ PAQUETE_DE_DATOS ]</label>
+        <textarea name="mensaje" required rows="5" placeholder="Escribe el motivo de la transmisión..."
+                  style="width: 100%; padding: 15px; background: var(--dark); border: 2px solid var(--primary); color: white; font-family: var(--font-tech); resize: none; outline: none;"></textarea>
+      </div>
+
+      <button type="submit" style="width: 100%; padding: 15px; font-size: 1.2rem; background: var(--primary); color: white; border: none; font-family: var(--font-tech); font-weight: bold; cursor: none; clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);">
+        ENVIAR_TRANSMISIÓN >>
+      </button>
+    </form>
+  </div>
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,19 +1,31 @@
+/**
+ * ==========================================================================
+ * VECTORHEART // CEREBRO DEL SISTEMA (APP.JS)
+ * V.2.0 - MODO HÍBRIDO ESTABLE
+ * ==========================================================================
+ */
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Mensaje oculto en la consola para los curiosos
   console.log("%c[SYSTEM BOOT] Vectorheart V.2 // MODO_HIBRIDO_ESTABLE.", "color: #E60000; font-family: monospace; font-size: 14px; font-weight: bold;");
 
-  // --- 1. CURSOR UNIVERSAL ---
+  /* ==========================================================================
+     1. CURSOR UNIVERSAL CIBERNÉTICO
+     ========================================================================== */
   const cursor = document.createElement('div');
   cursor.id = 'custom-cursor';
   cursor.innerHTML = '<div id="cursor-coords">X:0 Y:0</div>';
   document.body.appendChild(cursor);
   const coords = document.getElementById('cursor-coords');
 
+  // Mueve el cursor siguiendo el ratón
   document.addEventListener('mousemove', (e) => {
     cursor.style.left = `${e.clientX}px`;
     cursor.style.top = `${e.clientY}px`;
     coords.textContent = `X:${e.clientX} Y:${e.clientY}`;
   });
 
+  // Función para que el cursor cambie al pasar sobre botones/enlaces
   function attachCursorHover(elements) {
     elements.forEach(target => {
       target.addEventListener('mouseenter', () => {
@@ -28,14 +40,19 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
+  // Aplicamos el efecto hover a todos los elementos interactivos
   attachCursorHover(document.querySelectorAll('a, button, [data-target="true"]'));
 
-  // --- 2. MENÚ LATERAL (Seguro) ---
+
+  /* ==========================================================================
+     2. MENÚ LATERAL (SIDEBAR)
+     ========================================================================== */
   const menuBtn = document.getElementById('menuBtn');
   const closeMenuBtn = document.getElementById('closeMenuBtn');
   const sideMenu = document.getElementById('sideMenu');
   const tiendaLink = document.getElementById('tiendaLink');
 
+  // Solo se activa si los botones existen en la página actual
   if (menuBtn && sideMenu) {
     menuBtn.addEventListener('click', () => sideMenu.classList.add('active'));
   }
@@ -46,15 +63,17 @@ document.addEventListener('DOMContentLoaded', () => {
     tiendaLink.addEventListener('click', () => sideMenu.classList.remove('active'));
   }
 
-  // --- 3. BASE DE DATOS ---
-  const artDatabase = [
-    { id: "VH-001", title: "SYSTEM_OVERRIDE", price: 45.00, status: "ONLINE", image: "assets/img/obra1.jpg", artist: "Kael_X", exhibitions: "Cyber-Gallery 2025", rating: 5, desc: "Análisis espectral de frecuencias de neón." },
-    { id: "VH-002", title: "Y2K_ARCHIVE_MIX", price: 60.00, status: "ONLINE", image: "assets/img/obra2.jpg", artist: "Vectorheart Collective", exhibitions: "Retro-Future Expo", rating: 4, desc: "Recopilación de interfaces gráficas y portadas." },
-    { id: "VH-003", title: "BRAWLERS_WORLD", price: 35.00, status: "ONLINE", image: "assets/img/obra3.jpg", artist: "J.D. F.", exhibitions: "Archivo Interno", rating: 5, desc: "Cartografía abstracta y diseño low-poly." },
-    { id: "VH-004", title: "FAITH_RUNNER", price: 55.00, status: "NUEVO", image: "assets/img/obra4.jpg", artist: "DICE_Inspire", exhibitions: "Underground Digital Fest", rating: 5, desc: "El rojo como guía. Experimento sobre el flujo." }
-  ];
 
-  // --- 4. MEMORIA LOCAL Y RENDERIZADO DEL PANEL DEL CARRITO ---
+  /* ==========================================================================
+     3. BASE DE DATOS DE ARTE (AHORA ALIMENTADA POR API EXTERNA)
+     ========================================================================== */
+  let artDatabase = []; // Inicia completamente vacía, se llenará con el JSON
+
+
+  /* ==========================================================================
+     4. CARRITO DE COMPRAS Y ALMACENAMIENTO (LOCALSTORAGE)
+     ========================================================================== */
+  // Recupera el carrito guardado en el navegador o inicia vacío
   let cart = JSON.parse(localStorage.getItem('vh_cart_items')) || [];
 
   const cartLink = document.querySelector('.cart-link');
@@ -63,10 +82,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const cartItemsContainer = document.getElementById('cartItemsContainer');
   const cartTotalValue = document.getElementById('cartTotalValue');
 
-  // Actualizar UI del carrito completo (Seguro)
+  // Dibuja los productos guardados en el panel del carrito
   function updateCartUI() {
     if (cartPanel && cartLink) {
-      // Evitamos sobrescribir el botón "<< VOLVER" de la página de misión
+      // Solo actualiza el texto del botón si es el de carrito (protege otros links)
       if (cartLink.textContent.includes('CARRITO') || cartLink.textContent.includes('0')) {
         cartLink.textContent = `CARRITO (${cart.length})`;
       }
@@ -98,14 +117,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       cartTotalValue.textContent = total.toFixed(2);
-      attachRemoveLogic();
+      attachRemoveLogic(); // Refresca los botones de borrar
     } else {
-      // Si no hay panel, solo actualiza la memoria interna
+      // Si no existe el panel (ej. página de misión), solo guarda en memoria oculta
       localStorage.setItem('vh_cart_items', JSON.stringify(cart));
     }
   }
 
-  // Lógica para borrar un ítem
+  // Permite borrar items del carrito
   function attachRemoveLogic() {
     const removeBtns = document.querySelectorAll('.remove-item-btn');
     attachCursorHover(removeBtns);
@@ -118,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Abrir/Cerrar panel de carrito (Solo si existen)
+  // Controles de apertura y cierre del panel lateral
   if (cartLink && cartPanel && closeCartBtn) {
     cartLink.addEventListener('click', (e) => {
       e.preventDefault();
@@ -127,10 +146,35 @@ document.addEventListener('DOMContentLoaded', () => {
     closeCartBtn.addEventListener('click', () => cartPanel.classList.remove('active'));
   }
 
-  // --- 5. RENDERIZADO DEL CATÁLOGO (Solo en index.html) ---
+
+  /* ==========================================================================
+     5. RENDERIZADO DEL CATÁLOGO (Solo para index.html)
+     ========================================================================== */
   const catalogGrid = document.getElementById('catalog-grid');
 
   if (catalogGrid) {
+    // NUEVA FUNCIÓN ASÍNCRONA: Simula la llamada a la API
+    async function fetchArtCatalog() {
+      try {
+        // Muestra mensaje de carga cibernético
+        catalogGrid.innerHTML = '<div style="color:var(--primary); font-size:2rem; grid-column: 1 / -1; text-align:center;">[ CONECTANDO CON SERVIDOR DE CATÁLOGO... ]</div>';
+
+        const response = await fetch('./productos.json');
+
+        if (!response.ok) throw new Error('Error en la conexión del servidor');
+
+        // Guardamos los datos en nuestra variable global
+        artDatabase = await response.json();
+
+        // Una vez que tenemos los datos, dibujamos la tienda
+        renderCatalog();
+
+      } catch (error) {
+        console.error("Fallo de sistema:", error);
+        catalogGrid.innerHTML = '<div style="color:var(--primary); font-size:2rem; grid-column: 1 / -1; text-align:center;">[ ERROR DE CONEXIÓN // CATÁLOGO CORRUPTO ]</div>';
+      }
+    }
+
     function renderCatalog() {
       catalogGrid.innerHTML = '';
       artDatabase.forEach(product => {
@@ -156,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
       attachModalLogic();
     }
 
-    // Lógica de los botones "AÑADIR AL SISTEMA"
+    // Funcionalidad de "Añadir al Carrito"
     function attachCartAddLogic() {
       const addButtons = document.querySelectorAll('.add-btn');
       attachCursorHover(addButtons);
@@ -183,10 +227,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    renderCatalog();
+    // INICIAMOS LA DESCARGA
+    fetchArtCatalog();
   }
 
-  // --- 6. MODAL DE INSPECCIÓN (Solo si existe) ---
+
+  /* ==========================================================================
+     6. HUD DE INSPECCIÓN (MODAL)
+     ========================================================================== */
   const modal = document.getElementById('artModal');
   const closeModalBtn = document.getElementById('closeModalBtn');
 
@@ -200,6 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const product = artDatabase.find(p => p.id === productId);
 
         if (product && modal) {
+          // Inyectar datos en la ventana emergente
           document.getElementById('modalTitle').textContent = product.title;
           document.getElementById('modalArtist').textContent = product.artist;
           document.getElementById('modalExhibitions').textContent = product.exhibitions;
@@ -219,7 +268,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (closeModalBtn && modal) {
     closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
   }
-  // --- 7. MODO TÁCTICO: CERRAR CON TECLA ESCAPE ---
+
+
+  /* ==========================================================================
+     7. MODO TÁCTICO: ATAJOS DE TECLADO
+     ========================================================================== */
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       // 1. Cerrar Menú Lateral
@@ -237,24 +290,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- INICIO DEL SISTEMA ---
+
+  /* ==========================================================================
+     8. SECUENCIA DE INICIO AL CARGAR
+     ========================================================================== */
   updateCartUI();
 
-  // --- 7. MODO TÁCTICO: CERRAR CON TECLA ESCAPE ---
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      // 1. Cerrar Menú Lateral
-      if (sideMenu && sideMenu.classList.contains('active')) {
-        sideMenu.classList.remove('active');
-      }
-      // 2. Cerrar Carrito de Compras
-      if (cartPanel && cartPanel.classList.contains('active')) {
-        cartPanel.classList.remove('active');
-      }
-      // 3. Cerrar el Modal (Ventana de inspección de arte)
-      if (modal && modal.classList.contains('active')) {
-        modal.classList.remove('active');
-      }
-    }
-  });
 });
