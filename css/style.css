@@ -17,7 +17,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  cursor: none !important; /* Oculta el cursor nativo del sistema */
 }
 
 body {
@@ -30,89 +29,33 @@ body {
 
 
 /* ==========================================================================
-   2. ELEMENTOS DE INTERFAZ GLOBAL (CURSOR VH-FIXED)
+   2. ELEMENTOS DE INTERFAZ GLOBAL (Efectos de Sistema)
    ========================================================================== */
 
-/* 1. Ocultar cursor nativo */
-body, a, button, .close-menu, .lang-btn, .social-icon, img, input {
-  cursor: none !important;
+/* NOTA: El cursor personalizado ha sido desactivado para mejorar la navegación */
+
+/* Ruido CRT (Interferencia de pantalla vieja) */
+.crt-noise {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.15; pointer-events: none; z-index: 9998; mix-blend-mode: multiply;
 }
 
-/* 2. CURSOR "VH-PHANTOM_ARW" (Versión Corregida: No Salta) */
-#custom-cursor {
-  width: 28px;
-  height: 28px;
-  position: fixed;
-  pointer-events: none;
-  z-index: 10000;
-  /* CLAVE: El origen en la punta (arriba-izquierda) para que no se mueva al escalar */
-  transform-origin: 0 0;
-  transition: transform 0.1s cubic-bezier(0.23, 1, 0.32, 1), width 0.3s, height 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Líneas de Escáner (Efecto UI) */
+.ui-scanner {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
+  background-size: 100% 4px; pointer-events: none; z-index: 9999;
 }
 
-/* LA FLECHA: SVG con relleno blanco y borde rojo */
-#custom-cursor::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  /* SVG Mejorado: Relleno blanco sólido, borde rojo neón */
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" fill="white" stroke="%23e60000" stroke-width="2"><path d="M2 2l20 10-9 3-3 9-8-22z" stroke-linejoin="round"/></svg>');
-  background-size: contain;
-  background-repeat: no-repeat;
-  filter: drop-shadow(0 0 5px var(--primary));
-  animation: vh-flicker 3s infinite;
-  z-index: 2;
+/* Cinta de Advertencia Superior (Marquee) */
+.top-marquee {
+  position: fixed; top: 0; left: 0; width: 100%; background: var(--primary);
+  color: white; padding: 5px 0; z-index: 100; overflow: hidden;
+  white-space: nowrap; border-bottom: 2px solid var(--dark);
+  font-weight: bold; font-size: 0.9rem; letter-spacing: 2px;
 }
 
-/* EFECTO DE PULSO (Onda de choque al hacer clic) */
-#custom-cursor::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 10px;
-  height: 10px;
-  background: var(--primary);
-  border-radius: 50%;
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0);
-}
-
-/* --- ANIMACIONES DE INTERACCIÓN --- */
-
-/* HOVER: Al estar sobre botones (Se hace un poco más grande sin perder la punta) */
-#custom-cursor.cursor-hover {
-  transform: scale(1.25);
-}
-
-/* CLIC: Se comprime hacia la punta, no hacia el centro */
-body:active #custom-cursor {
-  transform: scale(0.85); /* Se encoge pero la punta se queda quieta */
-}
-
-body:active #custom-cursor::before {
-  filter: brightness(1.5) drop-shadow(0 0 10px white);
-}
-
-/* --- KEYFRAMES --- */
-
-@keyframes vh-flicker {
-  0%, 100% { opacity: 1; filter: drop-shadow(0 0 5px var(--primary)); }
-  98% { opacity: 1; }
-  99% { opacity: 0.8; filter: drop-shadow(0 0 2px white); }
-}
-
-/* Coordenadas eliminadas */
-#cursor-coords { display: none; }
-
-/* --- NO TOCAR: EFECTOS DE FONDO --- */
-.crt-noise { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); opacity: 0.15; pointer-events: none; z-index: 9998; mix-blend-mode: multiply; }
-.ui-scanner { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%); background-size: 100% 4px; pointer-events: none; z-index: 9999; }
-.top-marquee { position: fixed; top: 0; left: 0; width: 100%; background: var(--primary); color: white; padding: 5px 0; z-index: 100; overflow: hidden; white-space: nowrap; border-bottom: 2px solid var(--dark); font-weight: bold; font-size: 0.9rem; letter-spacing: 2px; }
 .marquee-content { display: inline-block; animation: scroll 25s linear infinite; }
 @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
