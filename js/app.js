@@ -146,6 +146,15 @@ document.addEventListener('DOMContentLoaded', () => {
     closeCartBtn.addEventListener('click', () => cartPanel.classList.remove('active'));
   }
 
+  // Lógica para el botón de Purgar Sistema (Vaciar Todo)
+  const btnVaciar = document.getElementById('btn-vaciar-carrito');
+  if (btnVaciar) {
+    attachCursorHover([btnVaciar]); // Para que el cursor reaccione a este botón
+    btnVaciar.addEventListener('click', () => {
+      cart = []; // Vaciamos el arreglo
+      updateCartUI(); // Redibujamos la interfaz y guardamos en memoria
+    });
+  }
 
   /* ==========================================================================
      5. RENDERIZADO DEL CATÁLOGO (Solo para index.html)
@@ -168,6 +177,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Una vez que tenemos los datos, dibujamos la tienda
         renderCatalog();
+
+        // ¡LA SOLUCIÓN AL BUG ESTÁ AQUÍ!
+        // Ahora sí dibujamos el carrito porque ya tenemos la base de datos cargada
+        updateCartUI();
 
       } catch (error) {
         console.error("Fallo de sistema:", error);
