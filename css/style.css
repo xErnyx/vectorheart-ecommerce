@@ -99,6 +99,8 @@ header { background: var(--dark); color: white; padding: 15px 5%; position: rela
 .side-socials { display: flex; gap: 15px; margin-bottom: 15px; border-bottom: 1px dashed #444; padding-bottom: 15px; }
 .side-socials a { color: var(--secondary); font-family: var(--font-tech); font-weight: bold; font-size: 1.1rem; text-decoration: none; transition: 0.2s; }
 .side-socials a:hover { color: white; transform: translateY(-2px); }
+.side-socials a:hover svg { fill: var(--primary); }
+.side-socials a:hover img { filter: brightness(0) saturate(100%) invert(16%) sepia(99%) saturate(5414%) hue-rotate(355deg) brightness(95%) contrast(115%); }
 
 
 /* ==========================================================================
