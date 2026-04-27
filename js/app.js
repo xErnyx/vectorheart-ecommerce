@@ -1,13 +1,13 @@
 /**
  * ==========================================================================
  * VECTORHEART // CEREBRO DEL SISTEMA (APP.JS)
- * V.2.0 - MODO HÍBRIDO ESTABLE
+ * V.3.0 - MARATHON EDITION
  * ==========================================================================
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   // Mensaje oculto en la consola para los curiosos
-  console.log("%c[SYSTEM BOOT] Vectorheart V.2 // MODO_HIBRIDO_ESTABLE.", "color: #E60000; font-family: monospace; font-size: 14px; font-weight: bold;");
+  console.log("%c[SYSTEM BOOT] Vectorheart V.3 // TACTICAL_HUD_ACTIVE.", "color: #D4FF00; font-family: monospace; font-size: 14px; font-weight: bold; background: #000; padding: 5px;");
 
   /* ==========================================================================
      1. CURSOR UNIVERSAL CIBERNÉTICO
@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const sideMenu = document.getElementById('sideMenu');
   const tiendaLink = document.getElementById('tiendaLink');
 
-  // Solo se activa si los botones existen en la página actual
   if (menuBtn && sideMenu) {
     menuBtn.addEventListener('click', () => sideMenu.classList.add('active'));
   }
@@ -65,15 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ==========================================================================
-     3. BASE DE DATOS DE ARTE (AHORA ALIMENTADA POR API EXTERNA)
+     3. BASE DE DATOS DE ARTE
      ========================================================================== */
-  let artDatabase = []; // Inicia completamente vacía, se llenará con el JSON
+  let artDatabase = [];
 
 
   /* ==========================================================================
      4. CARRITO DE COMPRAS Y ALMACENAMIENTO (LOCALSTORAGE)
      ========================================================================== */
-  // Recupera el carrito guardado en el navegador o inicia vacío
   let cart = JSON.parse(localStorage.getItem('vh_cart_items')) || [];
 
   const cartLink = document.querySelector('.cart-link');
@@ -82,10 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const cartItemsContainer = document.getElementById('cartItemsContainer');
   const cartTotalValue = document.getElementById('cartTotalValue');
 
-  // Dibuja los productos guardados en el panel del carrito
   function updateCartUI() {
     if (cartPanel && cartLink) {
-      // Solo actualiza el texto del botón si es el de carrito (protege otros links)
       if (cartLink.textContent.includes('CARRITO') || cartLink.textContent.includes('0')) {
         cartLink.textContent = `CARRITO (${cart.length})`;
       }
@@ -95,7 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
       let total = 0;
 
       if(cart.length === 0) {
-        cartItemsContainer.innerHTML = '<p style="color:#666; font-family:monospace; margin-top:20px;">[ SISTEMA_VACÍO ]</p>';
+        // Texto limpio sin corchetes
+        cartItemsContainer.innerHTML = '<p style="color:#666; font-family:var(--font-tech); margin-top:20px; text-transform:uppercase; letter-spacing: 1px;">SISTEMA VACÍO</p>';
       }
 
       cart.forEach((productId, index) => {
@@ -109,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
                           <h4>${product.title}</h4>
                           <p>$${product.price.toFixed(2)}</p>
                       </div>
-                      <button class="remove-item-btn" data-index="${index}" data-target="true">[ X ]</button>
+                      <button class="remove-item-btn" data-index="${index}" data-target="true">X</button>
                   </div>
               `;
           cartItemsContainer.innerHTML += itemHTML;
@@ -117,14 +114,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       cartTotalValue.textContent = total.toFixed(2);
-      attachRemoveLogic(); // Refresca los botones de borrar
+      attachRemoveLogic();
     } else {
-      // Si no existe el panel (ej. página de misión), solo guarda en memoria oculta
       localStorage.setItem('vh_cart_items', JSON.stringify(cart));
     }
   }
 
-  // Permite borrar items del carrito
   function attachRemoveLogic() {
     const removeBtns = document.querySelectorAll('.remove-item-btn');
     attachCursorHover(removeBtns);
@@ -137,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Controles de apertura y cierre del panel lateral
   if (cartLink && cartPanel && closeCartBtn) {
     cartLink.addEventListener('click', (e) => {
       e.preventDefault();
@@ -146,52 +140,47 @@ document.addEventListener('DOMContentLoaded', () => {
     closeCartBtn.addEventListener('click', () => cartPanel.classList.remove('active'));
   }
 
-  // Lógica para el botón de Purgar Sistema (Vaciar Todo)
   const btnVaciar = document.getElementById('btn-vaciar-carrito');
   if (btnVaciar) {
-    attachCursorHover([btnVaciar]); // Para que el cursor reaccione a este botón
+    attachCursorHover([btnVaciar]);
     btnVaciar.addEventListener('click', () => {
-      cart = []; // Vaciamos el arreglo
-      updateCartUI(); // Redibujamos la interfaz y guardamos en memoria
+      cart = [];
+      updateCartUI();
     });
   }
 
+
   /* ==========================================================================
-     5. RENDERIZADO DEL CATÁLOGO (Solo para index.html)
+     5. RENDERIZADO DEL CATÁLOGO
      ========================================================================== */
   const catalogGrid = document.getElementById('catalog-grid');
 
   if (catalogGrid) {
-    // NUEVA FUNCIÓN ASÍNCRONA: Simula la llamada a la API
     async function fetchArtCatalog() {
       try {
-        // Muestra mensaje de carga cibernético
-        catalogGrid.innerHTML = '<div style="color:var(--primary); font-size:2rem; grid-column: 1 / -1; text-align:center;">[ CONECTANDO CON SERVIDOR DE CATÁLOGO... ]</div>';
+        // Mensaje de carga limpio
+        catalogGrid.innerHTML = '<div style="color:var(--primary); font-family:var(--font-heading); font-size:2rem; grid-column: 1 / -1; text-align:center;">CONECTANDO CON SERVIDOR...</div>';
 
         const response = await fetch('./productos.json');
 
         if (!response.ok) throw new Error('Error en la conexión del servidor');
 
-        // Guardamos los datos en nuestra variable global
         artDatabase = await response.json();
-
-        // Una vez que tenemos los datos, dibujamos la tienda
         renderCatalog();
-
-        // ¡LA SOLUCIÓN AL BUG ESTÁ AQUÍ!
-        // Ahora sí dibujamos el carrito porque ya tenemos la base de datos cargada
         updateCartUI();
 
       } catch (error) {
         console.error("Fallo de sistema:", error);
-        catalogGrid.innerHTML = '<div style="color:var(--primary); font-size:2rem; grid-column: 1 / -1; text-align:center;">[ ERROR DE CONEXIÓN // CATÁLOGO CORRUPTO ]</div>';
+        // Error limpio
+        catalogGrid.innerHTML = '<div style="color:var(--primary); font-family:var(--font-heading); font-size:2rem; grid-column: 1 / -1; text-align:center;">ERROR DE CONEXIÓN: CATÁLOGO CORRUPTO</div>';
       }
     }
 
     function renderCatalog() {
       catalogGrid.innerHTML = '';
       artDatabase.forEach(product => {
-        const isNew = product.status === 'NUEVO' ? '<span style="color:white; font-family:var(--font-title); font-size: 2rem; position:absolute; top:10px; left:10px; background:var(--primary); padding:2px 8px; z-index:20;">[NEW]</span>' : '';
+        // Etiqueta "NUEVO" adaptada al diseño sólido de Marathon
+        const isNew = product.status === 'NUEVO' ? '<span style="color:var(--dark); font-family:var(--font-tech); font-weight:bold; font-size: 0.9rem; position:absolute; top:10px; left:10px; background:var(--primary); padding:5px 10px; z-index:20; letter-spacing:1px;">NUEVO</span>' : '';
         const cardHTML = `
                   <div class="product-card">
                       <div class="card-header"><span class="serial">#${product.id}</span><span class="status-dot"></span></div>
@@ -202,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
                       </div>
                       <div class="product-info">
                           <h3>${product.title}</h3><p class="price">$${product.price.toFixed(2)}</p>
-                          <button class="add-btn" data-id="${product.id}" data-target="true">AÑADIR_AL_SISTEMA</button>
+                          <button class="add-btn" data-id="${product.id}" data-target="true">AÑADIR AL SISTEMA</button>
                       </div>
                   </div>
               `;
@@ -213,7 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
       attachModalLogic();
     }
 
-    // Funcionalidad de "Añadir al Carrito"
     function attachCartAddLogic() {
       const addButtons = document.querySelectorAll('.add-btn');
       attachCursorHover(addButtons);
@@ -225,22 +213,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
           const originalText = button.textContent;
           const card = button.closest('.product-card');
-          button.textContent = '[ DATOS_GUARDADOS ]';
+
+          // Feedback limpio sin corchetes
+          button.textContent = 'DATOS GUARDADOS';
           button.style.backgroundColor = 'var(--secondary)';
+          button.style.color = 'white';
           card.style.borderColor = 'var(--secondary)';
 
           if (cartPanel) cartPanel.classList.add('active');
 
           setTimeout(() => {
             button.textContent = originalText;
-            button.style.backgroundColor = 'var(--dark)';
-            card.style.borderColor = 'var(--dark)';
+            button.style.backgroundColor = 'var(--gray)';
+            button.style.color = 'var(--text-light)';
+            card.style.borderColor = 'var(--primary)';
           }, 1000);
         });
       });
     }
 
-    // INICIAMOS LA DESCARGA
     fetchArtCatalog();
   }
 
@@ -261,7 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const product = artDatabase.find(p => p.id === productId);
 
         if (product && modal) {
-          // Inyectar datos en la ventana emergente
           document.getElementById('modalTitle').textContent = product.title;
           document.getElementById('modalArtist').textContent = product.artist;
           document.getElementById('modalExhibitions').textContent = product.exhibitions;
@@ -288,18 +278,9 @@ document.addEventListener('DOMContentLoaded', () => {
      ========================================================================== */
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      // 1. Cerrar Menú Lateral
-      if (sideMenu && sideMenu.classList.contains('active')) {
-        sideMenu.classList.remove('active');
-      }
-      // 2. Cerrar Carrito de Compras
-      if (cartPanel && cartPanel.classList.contains('active')) {
-        cartPanel.classList.remove('active');
-      }
-      // 3. Cerrar el Modal (Ventana de inspección de arte)
-      if (modal && modal.classList.contains('active')) {
-        modal.classList.remove('active');
-      }
+      if (sideMenu && sideMenu.classList.contains('active')) sideMenu.classList.remove('active');
+      if (cartPanel && cartPanel.classList.contains('active')) cartPanel.classList.remove('active');
+      if (modal && modal.classList.contains('active')) modal.classList.remove('active');
     }
   });
 
