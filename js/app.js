@@ -45,38 +45,104 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ==========================================================================
-     2. MENÚ LATERAL (SIDEBAR)
-     ========================================================================== */
+   2. SISTEMA DE NAVEGACIÓN GLOBAL (MENÚ, CARRITO Y FAVORITOS)
+   ========================================================================== */
+// Selectores Visuales
   const menuBtn = document.getElementById('menuBtn');
   const closeMenuBtn = document.getElementById('closeMenuBtn');
   const sideMenu = document.getElementById('sideMenu');
-  const tiendaLink = document.getElementById('tiendaLink');
+  const menuLinks = document.querySelectorAll('.menu-links a');
 
-  if (menuBtn && sideMenu) {
+  const cartLink = document.querySelector('.cart-link');
+  const cartPanel = document.getElementById('cartPanel');
+  const closeCartBtn = document.getElementById('closeCartBtn');
+
+  const favBtn = document.getElementById('favBtn');
+
+// --- Lógica del Menú Lateral ---
+  if (menuBtn && closeMenuBtn && sideMenu) {
     menuBtn.addEventListener('click', () => sideMenu.classList.add('active'));
-  }
-  if (closeMenuBtn && sideMenu) {
     closeMenuBtn.addEventListener('click', () => sideMenu.classList.remove('active'));
+
+    // Cerrar al hacer clic fuera
+    document.addEventListener('click', (event) => {
+      if (sideMenu.classList.contains('active') && !sideMenu.contains(event.target) && !menuBtn.contains(event.target)) {
+        sideMenu.classList.remove('active');
+      }
+    });
+
+    // Cerrar automáticamente al hacer clic en un enlace
+    menuLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        const targetUrl = link.getAttribute('href');
+        sideMenu.classList.remove('active');
+
+        if (targetUrl.startsWith('#')) {
+          e.preventDefault();
+          const targetElement = document.querySelector(targetUrl);
+          if (targetElement) {
+            setTimeout(() => targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+          }
+        }
+      });
+    });
   }
-  if (tiendaLink && sideMenu) {
-    tiendaLink.addEventListener('click', () => sideMenu.classList.remove('active'));
+
+// --- Lógica de Apertura del Carrito ---
+  if (cartLink && cartPanel && closeCartBtn) {
+    cartLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      cartPanel.classList.add('active');
+    });
+    closeCartBtn.addEventListener('click', () => cartPanel.classList.remove('active'));
+  }
+
+// --- Lógica de Favoritos ---
+  if (favBtn) {
+    favBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      alert("SYS.OP // ADVERTENCIA: MÓDULO DE FAVORITOS ENCRIPTADO. DESBLOQUEO PENDIENTE.");
+    });
   }
 
 
   /* ==========================================================================
-     3. BASE DE DATOS DE ARTE
-     ========================================================================== */
+   3. CARGA DE BASE DE DATOS GLOBAL Y SINCRONIZACIÓN
+   ========================================================================== */
   let artDatabase = [];
 
+// Función asíncrona para cargar los datos en CUALQUIER página
+  async function initSystemData() {
+    try {
+      // Conectamos con el archivo JSON (Asegúrate de que la ruta sea correcta)
+      const response = await fetch('productos.json');
+      const data = await response.json();
+
+      // Guardamos los datos globalmente
+      artDatabase = data;
+
+      // MAGIA: Una vez que la base de datos está llena, obligamos al carrito a dibujarse
+      updateCartUI();
+
+      // (Opcional) Si estamos en el inicio y existe la función de dibujar el catálogo, la llamamos
+      const catalogGrid = document.getElementById('catalog-grid');
+      if (catalogGrid && typeof renderCatalog === 'function') {
+        renderCatalog();
+      }
+
+    } catch (error) {
+      console.error("SYS.ERR // Error de conexión con la base de datos de arte:", error);
+    }
+  }
+
+// Inicializamos el sistema en cuanto el archivo JS carga
+  initSystemData();
 
   /* ==========================================================================
      4. CARRITO DE COMPRAS Y ALMACENAMIENTO (LOCALSTORAGE)
      ========================================================================== */
   let cart = JSON.parse(localStorage.getItem('vh_cart_items')) || [];
 
-  const cartLink = document.querySelector('.cart-link');
-  const cartPanel = document.getElementById('cartPanel');
-  const closeCartBtn = document.getElementById('closeCartBtn');
   const cartItemsContainer = document.getElementById('cartItemsContainer');
   const cartTotalValue = document.getElementById('cartTotalValue');
 
@@ -90,7 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
       let total = 0;
 
       if(cart.length === 0) {
-        // Texto limpio sin corchetes
         cartItemsContainer.innerHTML = '<p style="color:#666; font-family:var(--font-tech); margin-top:20px; text-transform:uppercase; letter-spacing: 1px;">SISTEMA VACÍO</p>';
       }
 
@@ -99,15 +164,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if(product) {
           total += product.price;
           const itemHTML = `
-                  <div class="cart-item">
-                      <img src="${product.image}" alt="${product.title}">
-                      <div class="cart-item-info">
-                          <h4>${product.title}</h4>
-                          <p>$${product.price.toFixed(2)}</p>
-                      </div>
-                      <button class="remove-item-btn" data-index="${index}" data-target="true">X</button>
-                  </div>
-              `;
+                <div class="cart-item">
+                    <img src="${product.image}" alt="${product.title}">
+                    <div class="cart-item-info">
+                        <h4>${product.title}</h4>
+                        <p>$${product.price.toFixed(2)}</p>
+                    </div>
+                    <button class="remove-item-btn" data-index="${index}" data-target="true">X</button>
+                </div>
+            `;
           cartItemsContainer.innerHTML += itemHTML;
         }
       });
@@ -115,13 +180,16 @@ document.addEventListener('DOMContentLoaded', () => {
       cartTotalValue.textContent = total.toFixed(2);
       attachRemoveLogic();
     } else {
+      // Si no estamos en una página con carrito, al menos guardamos los datos
       localStorage.setItem('vh_cart_items', JSON.stringify(cart));
     }
   }
 
   function attachRemoveLogic() {
     const removeBtns = document.querySelectorAll('.remove-item-btn');
-    attachCursorHover(removeBtns);
+    // Se mantiene tu lógica original de cursores
+    if (typeof attachCursorHover === 'function') attachCursorHover(removeBtns);
+
     removeBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         const itemIndex = btn.getAttribute('data-index');
@@ -131,23 +199,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (cartLink && cartPanel && closeCartBtn) {
-    cartLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      cartPanel.classList.add('active');
-    });
-    closeCartBtn.addEventListener('click', () => cartPanel.classList.remove('active'));
-  }
-
+// Botón de Vaciar Carrito (Purgar Sistema)
   const btnVaciar = document.getElementById('btn-vaciar-carrito');
   if (btnVaciar) {
-    attachCursorHover([btnVaciar]);
+    if (typeof attachCursorHover === 'function') attachCursorHover([btnVaciar]);
     btnVaciar.addEventListener('click', () => {
       cart = [];
       updateCartUI();
     });
   }
-
 
   /* ==========================================================================
      5. RENDERIZADO DEL CATÁLOGO
