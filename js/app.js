@@ -168,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         artDatabase = await response.json();
         renderCatalog();
         updateCartUI();
+        initHeroCarousel();
 
       } catch (error) {
         console.error("Fallo de sistema:", error);
@@ -176,25 +177,28 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // RENDERIZADO DEL CATÁLOGO (Sección 5 - CORREGIDO)
     function renderCatalog() {
       catalogGrid.innerHTML = '';
-      artDatabase.forEach(product => {
-        // Etiqueta "NUEVO" adaptada al diseño sólido de Marathon
+      const archiveItems = artDatabase.slice(5);
+
+      archiveItems.forEach(product => {
+        // Recuperamos el estilo táctico del badge NUEVO
         const isNew = product.status === 'NUEVO' ? '<span style="color:var(--dark); font-family:var(--font-tech); font-weight:bold; font-size: 0.9rem; position:absolute; top:10px; left:10px; background:var(--primary); padding:5px 10px; z-index:20; letter-spacing:1px;">NUEVO</span>' : '';
         const cardHTML = `
-                  <div class="product-card">
-                      <div class="card-header"><span class="serial">#${product.id}</span><span class="status-dot"></span></div>
-                      <div class="product-image modal-trigger" data-id="${product.id}" data-target="true">
-                          <img src="${product.image}" alt="${product.title}" class="real-art-img">
-                          ${isNew}
-                          <div class="scan-overlay">INSPECCIONAR</div>
-                      </div>
-                      <div class="product-info">
-                          <h3>${product.title}</h3><p class="price">$${product.price.toFixed(2)}</p>
-                          <button class="add-btn" data-id="${product.id}" data-target="true">AÑADIR AL SISTEMA</button>
-                      </div>
-                  </div>
-              `;
+      <div class="product-card">
+          <div class="card-header"><span class="serial">#${product.id}</span><span class="status-dot"></span></div>
+          <div class="product-image modal-trigger" data-id="${product.id}" data-target="true">
+              <img src="${product.image}" alt="${product.title}" class="real-art-img">
+              ${isNew}
+              <div class="scan-overlay">INSPECCIONAR</div>
+          </div>
+          <div class="product-info">
+              <h3>${product.title}</h3><p class="price">$${product.price.toFixed(2)}</p>
+              <button class="add-btn" data-id="${product.id}" data-target="true">AÑADIR AL SISTEMA</button>
+          </div>
+      </div>
+    `;
         catalogGrid.innerHTML += cardHTML;
       });
 
@@ -214,7 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
           const originalText = button.textContent;
           const card = button.closest('.product-card');
 
-          // Feedback limpio sin corchetes
           button.textContent = 'DATOS GUARDADOS';
           button.style.backgroundColor = 'var(--secondary)';
           button.style.color = 'white';
@@ -232,6 +235,37 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // ÚNICA LÓGICA DEL CARRUSEL (Orden de imágenes corregido)
+    function initHeroCarousel() {
+      const carouselContainer = document.getElementById('heroCarousel');
+      if (!carouselContainer || artDatabase.length === 0) return;
+
+      const carouselItems = artDatabase.slice(0, 5);
+      let currentIndex = 0;
+
+      // Ubicamos la línea de escáner para inyectar las fotos justo detrás de ella
+      const scanline = carouselContainer.querySelector('.hero-scanline');
+
+      carouselItems.forEach((product, index) => {
+        const img = document.createElement('img');
+        img.src = product.image;
+        img.className = 'carousel-img' + (index === 0 ? ' active' : '');
+
+        // ¡LA MAGIA ESTÁ AQUÍ! Mantiene el orden exacto 0, 1, 2, 3, 4
+        carouselContainer.insertBefore(img, scanline);
+      });
+
+      const images = document.querySelectorAll('.carousel-img');
+      if (images.length > 1) {
+        setInterval(() => {
+          images[currentIndex].classList.remove('active');
+          currentIndex = (currentIndex + 1) % images.length;
+          images[currentIndex].classList.add('active');
+        }, 4500);
+      }
+    }
+
+    // INICIAMOS LA SECUENCIA
     fetchArtCatalog();
   }
 

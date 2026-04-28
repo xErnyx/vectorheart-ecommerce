@@ -108,25 +108,21 @@
 
 <main>
   <section class="hero">
-    <div class="hero-art-display">
-      <img src="assets/img/obra5.jpg" alt="Art Showcase" class="hero-main-img">
-      <div class="hero-scanline"></div>
-      <div class="hero-glitch-overlay"></div>
-    </div>
-
-    <div class="hero-content minimalist-hero">
+    <div class="hero-content">
+      <div class="hero-badge">SISTEMA EN LÍNEA</div>
       <h1 class="glitch-title">VECTOR<br>HEART</h1>
+      <p class="hero-desc">ARCHIVO DE DISEÑO TÁCTICO Y ARTE CIBERNÉTICO. SELECCIONE UNA OBRA PARA INSPECCIÓN EN EL TERMINAL PRINCIPAL.</p>
       <button class="btn-explore" data-target="true" onclick="document.getElementById('catalog-grid').scrollIntoView({behavior: 'smooth', block: 'start'})">
         EXPLORAR
       </button>
     </div>
+    <div class="hero-art-display" id="heroCarousel">
+    </div>
   </section>
 
   <section class="catalog">
-    <h2 class="section-title">TIENDA ACTIVA</h2>
-
-    <div class="product-grid" id="catalog-grid">
-    </div>
+    <h2 class="section-title">ARCHIVO GENERAL // CATALOG</h2>
+    <div class="product-grid" id="catalog-grid"></div>
   </section>
 </main>
 
