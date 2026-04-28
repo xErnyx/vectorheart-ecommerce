@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const s = String(now.getSeconds()).padStart(2, '0');
 
       // Solo el prefijo UTC y la hora, limpio y centrado
-      clockElement.innerHTML = `<span style="opacity:0.5; font-size:0.6rem; margin-right:5px;">UTC</span>${h}:${m}:${s}`;
+      clockElement.innerHTML = `<span style="opacity:0.5; font-size:0.6rem; margin-right:5px;"></span>${h}:${m}:${s}`;
     }
 
     // Actualizamos cada segundo
