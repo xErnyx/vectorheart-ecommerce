@@ -379,33 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ==========================================================================
-     8. WIDGET DE ESTADO: RELOJ TÁCTICO (TIEMPO REAL)
-     ========================================================================== */
-  function initTacticalClock() {
-    const clockElement = document.getElementById('tacticalClock');
-    if (!clockElement) return;
-
-    function updateTime() {
-      const now = new Date();
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
-      const s = String(now.getSeconds()).padStart(2, '0');
-
-      // Solo el prefijo UTC y la hora, limpio y centrado
-      clockElement.innerHTML = `<span style="opacity:0.5; font-size:0.6rem; margin-right:5px;"></span>${h}:${m}:${s}`;
-    }
-
-    // Actualizamos cada segundo
-    setInterval(updateTime, 1000);
-    updateTime(); // Ejecución inmediata al cargar
-  }
-
-  // Lanzamos el reloj
-  initTacticalClock();
-
-
-  /* ==========================================================================
-     9. SECUENCIA DE INICIO AL CARGAR
+     8. SECUENCIA DE INICIO AL CARGAR
      ========================================================================== */
   updateCartUI();
 
