@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function initSystemData() {
     try {
       // Conectamos con el archivo JSON (Asegúrate de que la ruta sea correcta)
-      const response = await fetch('productos.json');
+      const response = await fetch('data/productos.json');
       const data = await response.json();
 
       // Guardamos los datos globalmente
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Mensaje de carga limpio
         catalogGrid.innerHTML = '<div style="color:var(--primary); font-family:var(--font-heading); font-size:2rem; grid-column: 1 / -1; text-align:center;">CONECTANDO CON SERVIDOR...</div>';
 
-        const response = await fetch('./productos.json');
+        const response = await fetch('data/productos.json');
 
         if (!response.ok) throw new Error('Error en la conexión del servidor');
 
