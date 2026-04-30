@@ -3,79 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ENLACE DE COMUNICACIÓN // VECTORHEART</title>
+  <title>VECTORHEART // LOGIN SISTEMA</title>
 
+  <!-- Hoja de estilos global (Header, Footer, Cursor) -->
   <link rel="stylesheet" href="css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Hoja de estilos exclusiva para formularios -->
+  <link rel="stylesheet" href="css/auth.css">
 
-  <style>
-    /* Estilos específicos para la Terminal de Contacto */
-    .terminal-input {
-      width: 100%;
-      padding: 15px;
-      background: rgba(10, 10, 10, 0.9);
-      border: 1px solid #444;
-      color: #FFF;
-      font-family: var(--font-tech);
-      font-size: 1rem;
-      outline: none;
-      transition: all 0.3s ease;
-      box-sizing: border-box;
-    }
-
-    .terminal-input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 10px rgba(212, 255, 0, 0.2), inset 0 0 5px rgba(212, 255, 0, 0.1);
-      background: #000;
-    }
-
-    .terminal-input::placeholder {
-      color: #555;
-      font-style: italic;
-    }
-
-    .terminal-label {
-      color: var(--primary);
-      font-family: var(--font-tech);
-      font-size: 0.9rem;
-      font-weight: bold;
-      display: block;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
-    }
-
-    .btn-submit {
-      width: 100%;
-      padding: 18px;
-      font-size: 1.2rem;
-      background: var(--primary);
-      color: var(--dark); /* Texto oscuro para que lea sobre fondo brillante */
-      border: none;
-      font-family: var(--font-heading);
-      letter-spacing: 2px;
-      transition: all 0.2s ease;
-      /* Corte táctico en las esquinas */
-      clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
-    }
-
-    .btn-submit:hover {
-      background: #FFF;
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(212, 255, 0, 0.4);
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Playfair+Display:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body class="contacto-page">
+<body>
 
 <div class="ui-scanner"></div>
 <div class="crt-noise"></div>
 
+<!-- Marquesina de Advertencia Global -->
 <div class="danger-marquee top-marquee">
   <div class="marquee-content">
-    ESTABLECIENDO ENLACE SEGURO // ENCRIPTACIÓN NIVEL 4 ACTIVA // MONITOREO DE RED UESC // ESTABLECIENDO ENLACE SEGURO // ENCRIPTACIÓN NIVEL 4 ACTIVA // MONITOREO DE RED UESC //
+    ADVERTENCIA: CONTENIDO VECTORIAL ALTAMENTE VOLÁTIL // ACCESO RESTRINGIDO // SISTEMA DE ARCHIVOS UPS_V.2 // ADVERTENCIA: CONTENIDO VECTORIAL ALTAMENTE VOLÁTIL // ACCESO RESTRINGIDO // SISTEMA DE ARCHIVOS UPS_V.2 //
   </div>
 </div>
 
+<!-- ================= HEADER GLOBAL COMPLETO ================= -->
 <header class="main-header">
   <a href="index.html" class="brand-logo" data-target="true" title="Reiniciar Sistema">
     <img src="assets/icons/Vectorheart.png" alt="Vectorheart Logo" class="heart-logo">
@@ -100,46 +49,69 @@
   </div>
 </header>
 
-<main style="padding: 80px 5%; display: flex; flex-direction: column; align-items: center; min-height: 80vh;">
+<!-- ================= ÁREA CENTRAL DE LOGIN ================= -->
+<main class="auth-main" style="padding-top: 100px;">
+  <div class="auth-container">
 
-  <div style="width: 100%; max-width: 650px; position: relative;">
-
-    <div style="display: flex; justify-content: space-between; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 30px;">
-      <div class="hero-badge" style="margin: 0; border-left-color: var(--secondary);">// TRANSMISIÓN_ENTRANTE</div>
-      <span style="font-family: var(--font-tech); color: #666; font-size: 0.85rem; align-self: flex-end;">UPLINK: ESTABLE</span>
-    </div>
-
-    <h1 class="glitch-title" style="font-size: 5rem; margin-bottom: 10px; color: var(--text-light); text-shadow: 3px 3px 0px var(--primary), -2px -2px 0px var(--secondary);">CONTACTO</h1>
-    <p style="font-family: var(--font-tech); color: #AAA; margin-bottom: 40px; line-height: 1.6;">Ingrese sus credenciales y el paquete de datos a transmitir. El tiempo de respuesta del sistema dependerá de la congestión de la red local.</p>
-
-    <form action="https://formspree.io/f/xyklobnn" method="POST" style="background: rgba(0, 0, 0, 0.6); padding: 40px; border: 1px solid #333; position: relative;">
-
-      <div style="position: absolute; top: -1px; left: -1px; width: 15px; height: 15px; border-top: 2px solid var(--primary); border-left: 2px solid var(--primary);"></div>
-      <div style="position: absolute; bottom: -1px; right: -1px; width: 15px; height: 15px; border-bottom: 2px solid var(--primary); border-right: 2px solid var(--primary);"></div>
-
-      <div style="margin-bottom: 25px;">
-        <label class="terminal-label">[ IDENTIFICACIÓN ]</label>
-        <input type="text" name="nombre" required placeholder="Ingresa tu ID_usuario" class="terminal-input" data-target="true">
+    <!-- Sección de Formulario de Ingreso -->
+    <section class="auth-section">
+      <div class="auth-header" style="display: flex; align-items: center; gap: 15px;">
+        <h2 style="display: flex; align-items: center; gap: 10px;">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+          INGRESO AL SISTEMA
+        </h2>
+        <span class="status-dot blink"></span>
       </div>
 
-      <div style="margin-bottom: 25px;">
-        <label class="terminal-label">[ RED_DE_CONTACTO ]</label>
-        <input type="email" name="email" required placeholder="correo@sistema.com" class="terminal-input" data-target="true">
-      </div>
+      <form action="#" method="post" id="formLogin" class="auth-form" novalidate>
+        <div class="form-group">
+          <label for="email" class="form-label" style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            [ CORREO ELECTRÓNICO ]
+          </label>
+          <input type="email" class="form-input" id="email" name="txtEmail" placeholder="operador@vectorheart.sys" required>
+        </div>
 
-      <div style="margin-bottom: 35px;">
-        <label class="terminal-label">[ PAQUETE_DE_DATOS ]</label>
-        <textarea name="mensaje" required rows="5" placeholder="Escribe el motivo de la transmisión..." class="terminal-input" data-target="true"></textarea>
-      </div>
+        <div class="form-group">
+          <label for="clave" class="form-label" style="display: flex; align-items: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            [ CONTRASEÑA ]
+          </label>
+          <input type="password" class="form-input" id="clave" name="txtClave" placeholder="••••••••" required>
+        </div>
 
-      <button type="submit" class="btn-submit" data-target="true">
-        INICIAR TRANSMISIÓN >>
-      </button>
-    </form>
+        <div class="form-actions">
+          <button type="submit" class="btn-submit" data-target="true" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M11 7L9.6 8.4l2.6 2.6H2v2h10.2l-2.6 2.6L11 17l5-5-5-5zm9 12h-8v2h8c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-8v2h8v14z"/></svg>
+            INICIAR SESIÓN
+          </button>
+          <button type="reset" class="btn-reset" data-target="true" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M15 16h4v2h-4zm0-8h7v2h-7zm0 4h6v2h-6zM3 18c0 1.1.9 2 2 2h6c1.1 0 2-.9 2-2V8H3v10zM14 5h-3l-1-1H6L5 5H2v2h12z"/></svg>
+            PURGAR DATOS
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Sección Aside: Promoción de Registro -->
+    <aside class="auth-aside">
+      <div class="aside-content">
+        <h3 style="display: flex; align-items: center; gap: 10px;">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>
+          ¿SISTEMA SIN REGISTRO?
+        </h3>
+        <p>Para acceder a los archivos vectoriales clasificados, debe establecer un nuevo enlace de usuario.</p>
+        <a href="registro.html" class="btn-register-link" data-target="true" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          REGISTRAR NUEVO USUARIO
+        </a>
+      </div>
+    </aside>
+
   </div>
 </main>
 
-
+<!-- ================= MENÚ LATERAL Y CARRITO GLOBAL ================= -->
 <div class="side-menu" id="sideMenu" style="justify-content: flex-start; gap: 25px; overflow-y: auto; padding-top: 60px;">
   <button class="close-menu" id="closeMenuBtn" data-target="true">X</button>
 
@@ -150,7 +122,7 @@
 
   <ul class="menu-links" style="margin-bottom: 10px;">
     <li><a href="index.html" data-target="true" style="display: flex; align-items: center; gap: 15px;"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg> INICIO</a></li>
-    <li><a href="404.html" data-target="true" style="display: flex; align-items: center; gap: 15px;"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> LOGIN</a></li>
+    <li><a href="login.html" data-target="true" style="display: flex; align-items: center; gap: 15px;"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> LOGIN</a></li>
     <li><a href="filosofia.html" data-target="true" style="display: flex; align-items: center; gap: 15px;"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 2L2 22h20L12 2zm0 5l5 10h-10l5-10z"/></svg> FILOSOFÍA</a></li>
     <li><a href="index.html#catalog-grid" id="tiendaLink" data-target="true" style="display: flex; align-items: center; gap: 15px;"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M4 4h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 10h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4zM4 16h4v4H4zm6 0h4v4h-4zm6 0h4v4h-4z"/></svg> CATÁLOGO</a></li>
     <li><a href="servicios.html" data-target="true" style="display: flex; align-items: center; gap: 15px;"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.5 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.4-2.4c.4-.4.4-1 0-1.3z"/></svg> SERVICIOS</a></li>
@@ -166,17 +138,11 @@
       <a href="https://www.instagram.com/0antonimo0/" target="_blank" data-target="true" title="Instagram"><img src="https://cdn.simpleicons.org/instagram/white" alt="Instagram" style="width: 22px; height: 22px;" class="social-icon"></a>
       <a href="https://www.tiktok.com/@erny_xp555" target="_blank" data-target="true" title="TikTok"><img src="https://cdn.simpleicons.org/tiktok/white" alt="TikTok" style="width: 22px; height: 22px;" class="social-icon"></a>
     </div>
-    <div class="localization-controls" style="display: flex; gap: 10px; justify-content: center; width: 100%;">
-      <button class="loc-btn" data-target="true" style="justify-content: center; padding: 10px 20px;">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.91-4.33-3.56zm2.95-8H5.08c-.96 1.66-2.49 2.93-4.33 3.56C5.81 7.11 6.28 5.92 6.6 4.68zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.34.16-2h4.68c.09.66.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>
-        Ecuador
-      </button>
-      <button class="loc-btn" data-target="true" style="justify-content: center; padding: 10px 20px;">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
-        Español
-      </button>
-    </div>
 
+    <div class="localization-controls" style="display: flex; gap: 10px; justify-content: center; width: 100%;">
+      <button class="loc-btn" data-target="true" style="justify-content: center; padding: 10px 20px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.91-4.33-3.56zm2.95-8H5.08c-.96 1.66-2.49 2.93-4.33 3.56C5.81 7.11 6.28 5.92 6.6 4.68zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.34.16-2h4.68c.09.66.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg> Ecuador</button>
+      <button class="loc-btn" data-target="true" style="justify-content: center; padding: 10px 20px;"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg> Español</button>
+    </div>
     <p class="copyright" style="color: #666; font-size: 0.85rem; margin: 0; text-align: center; font-family: var(--font-tech);">© 2026 VECTORHEART</p>
   </div>
 </div>
@@ -194,6 +160,7 @@
   </div>
 </div>
 
+<!-- ================= FOOTER GLOBAL ================= -->
 <footer class="main-footer" style="background: rgba(10, 10, 10, 0.95); border-top: 2px solid var(--primary); padding: 60px 5% 0px; margin-top: 80px; display: flex; flex-direction: column; position: relative; z-index: 10;">
 
   <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 80px; width: 100%; margin-bottom: 5px;">
@@ -212,7 +179,7 @@
       <h4 style="color: var(--text-light); font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase;">Navegación_</h4>
       <ul class="footer-links" style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px;">
         <li><a href="index.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Inicio del Sistema</a></li>
-        <li><a href="404.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Login de Usuario</a></li>
+        <li><a href="login.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Login de Usuario</a></li>
         <li><a href="filosofia.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Filosofía y Misión</a></li>
         <li><a href="index.html#catalog-grid" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Catálogo Vectorial</a></li>
         <li><a href="servicios.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Servicios Tácticos</a></li>
@@ -261,5 +228,7 @@
 </div>
 
 <script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+
 </body>
 </html>
