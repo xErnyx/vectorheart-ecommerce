@@ -1,6 +1,6 @@
 /**
  * VECTORHEART // SISTEMA DE AUTENTICACIÓN Y VALIDACIÓN (AUTH.JS)
- * V.4 - PROTOCOLO DE SEGURIDAD ECUADOR ACTIVADO
+ * V.5 - PROTOCOLO DE SEGURIDAD ECUADOR + ROLES ACTIVADOS
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -51,6 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
     "30": "Exterior"
   };
 
+  // REGEX PARA VALIDAR FORMATO DE CORREO
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   /* ==========================================================================
      1. LÓGICA DE LOGIN
      ========================================================================== */
@@ -66,13 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const submitBtn = formLogin.querySelector('.btn-submit');
       const originalBtnHTML = submitBtn.innerHTML;
 
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
       if (!emailInput.value.trim()) { showError(emailInput, "DATO REQUERIDO."); isValid = false; }
       else if (!emailRegex.test(emailInput.value.trim())) { showError(emailInput, "FORMATO INVÁLIDO."); isValid = false; }
       if (!claveInput.value.trim()) { showError(claveInput, "CLAVE REQUERIDA."); isValid = false; }
 
       if (isValid) {
+        // [MEJORA] Si se loguea correctamente, sobrescribimos el rol a "oficial"
+        localStorage.setItem('vh_user_role', 'oficial');
+
         submitBtn.style.background = "#FFF";
         submitBtn.textContent = "VERIFICANDO CREDENCIALES...";
         setTimeout(() => {
@@ -81,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
           window.location.href = "index.html";
         }, 1500);
       } else {
-        // ANIMACIÓN DE ERROR (NUEVO)
         submitBtn.style.background = "#FF003C";
         submitBtn.style.color = "#FFF";
         submitBtn.textContent = "[ ACCESO DENEGADO ]";
@@ -103,10 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (formRegistro) {
 
-    // Detección de provincia en vivo
     if(cedulaInput) {
       cedulaInput.addEventListener('input', function() {
-        this.value = this.value.replace(/[^0-9]/g, ''); // Solo números
+        this.value = this.value.replace(/[^0-9]/g, '');
         if (this.value.length >= 2) {
           const codigo = this.value.substring(0, 2);
           if (provinciasEcuador[codigo]) {
@@ -133,19 +135,40 @@ document.addEventListener('DOMContentLoaded', () => {
       const nombreInput = document.getElementById('nombre');
       const emailInput = document.getElementById('emailReg');
       const claveInput = document.getElementById('claveReg');
+      const claveConfirmInput = document.getElementById('claveConfirm');
       const fechaInput = document.getElementById('fecha');
 
       if (!nombreInput.value.trim()) { showError(nombreInput, "IDENTIFICACIÓN REQUERIDA."); isValid = false; }
-      if (!emailInput.value.trim()) { showError(emailInput, "ENLACE REQUERIDO."); isValid = false; }
-      if (!claveInput.value.trim()) { showError(claveInput, "CLAVE REQUERIDA."); isValid = false; }
+
+      // [MEJORA] Validación estricta de formato de correo en Registro
+      if (!emailInput.value.trim()) {
+        showError(emailInput, "ENLACE REQUERIDO.");
+        isValid = false;
+      } else if (!emailRegex.test(emailInput.value.trim())) {
+        showError(emailInput, "FORMATO DE CORREO INVÁLIDO.");
+        isValid = false;
+      }
+
       if (!fechaInput.value) { showError(fechaInput, "PERÍODO DE FABRICACIÓN REQUERIDO."); isValid = false; }
 
-      // Validación estricta de Cédula Matemática
+      // Validación de contraseñas cruzadas
+      if (!claveInput.value.trim()) {
+        showError(claveInput, "CLAVE REQUERIDA.");
+        isValid = false;
+      }
+      if (!claveConfirmInput.value.trim()) {
+        showError(claveConfirmInput, "DEBE VERIFICAR CLAVE.");
+        isValid = false;
+      } else if (claveConfirmInput.value !== claveInput.value) {
+        showError(claveConfirmInput, "LAS CLAVES NO COINCIDEN.");
+        isValid = false;
+      }
+
       if (!cedulaInput.value.trim()) {
         showError(cedulaInput, "CÓDIGO SERIAL REQUERIDO.");
         isValid = false;
       } else if (!validarCedulaEcuatoriana(cedulaInput.value.trim())) {
-        showError(cedulaInput, "CÉDULA ECUATORIANA INVÁLIDA (Rechazo Matemático).");
+        showError(cedulaInput, "CÉDULA ECUATORIANA INVÁLIDA.");
         isValid = false;
       }
 
@@ -153,7 +176,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const submitBtn = formRegistro.querySelector('.btn-submit');
         const originalBtnHTML = submitBtn.innerHTML;
 
-        // Función interna para guardar y redirigir
         const saveAndRedirect = (fotoData) => {
           const [birthYear, birthMonth] = fechaInput.value.split('-');
           const today = new Date();
@@ -171,12 +193,13 @@ document.addEventListener('DOMContentLoaded', () => {
             fecha: fechaInput.value,
             residencia: document.querySelector('input[name="rdResidencia"]:checked').value,
             color: document.getElementById('color').value,
-            foto: fotoData // Aquí guardamos el código de la imagen
+            foto: fotoData
           };
 
           localStorage.setItem('vh_new_user', JSON.stringify(userData));
+          // [MEJORA] Si se registra correctamente, le damos el rol de usuario oficial
+          localStorage.setItem('vh_user_role', 'oficial');
 
-          // ANIMACIÓN DE ÉXITO
           submitBtn.style.background = "#FFF";
           submitBtn.style.color = "var(--dark)";
           submitBtn.innerHTML = "PROCESANDO ENLACE...";
@@ -185,20 +208,17 @@ document.addEventListener('DOMContentLoaded', () => {
           }, 1500);
         };
 
-        // Lógica para procesar la imagen con FileReader
         const fotoInput = document.getElementById('foto');
         if (fotoInput.files && fotoInput.files[0]) {
           const reader = new FileReader();
           reader.onload = function(e) {
-            saveAndRedirect(e.target.result); // Si subió foto, la convertimos y guardamos
+            saveAndRedirect(e.target.result);
           };
           reader.readAsDataURL(fotoInput.files[0]);
         } else {
-          // Si no subió foto, ponemos un logo por defecto
           saveAndRedirect("assets/icons/Vectorheart.png");
         }
       } else {
-        // ANIMACIÓN DE RECHAZO (NUEVO)
         submitBtn.style.background = "#FF003C";
         submitBtn.style.color = "#FFF";
         submitBtn.innerHTML = "[ REGISTRO DENEGADO ]";
