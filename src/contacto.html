@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- ================= METADATOS Y TÍTULO ================= -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ENLACE DE COMUNICACIÓN // VECTORHEART</title>
 
+  <!-- ================= HOJAS DE ESTILO Y FUENTES ================= -->
   <link rel="stylesheet" href="css/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
+  <!-- ================= ESTILOS LOCALES (FORMULARIO TERMINAL) ================= -->
   <style>
     /* Estilos específicos para la Terminal de Contacto */
     .terminal-input {
@@ -67,20 +70,24 @@
 </head>
 <body class="contacto-page">
 
+<!-- ================= EFECTOS VISUALES GLOBALES ================= -->
 <div class="ui-scanner"></div>
 <div class="crt-noise"></div>
 
+<!-- Marquesina superior -->
 <div class="danger-marquee top-marquee">
   <div class="marquee-content">
     ESTABLECIENDO ENLACE SEGURO // ENCRIPTACIÓN NIVEL 4 ACTIVA // MONITOREO DE RED UESC // ESTABLECIENDO ENLACE SEGURO // ENCRIPTACIÓN NIVEL 4 ACTIVA // MONITOREO DE RED UESC //
   </div>
 </div>
 
+<!-- ================= HEADER PRINCIPAL ================= -->
 <header class="main-header">
   <a href="index.html" class="brand-logo" data-target="true" title="Reiniciar Sistema">
     <img src="assets/icons/Vectorheart.png" alt="Vectorheart Logo" class="heart-logo">
   </a>
 
+  <!-- Barra de Búsqueda -->
   <div class="header-search-container">
     <input type="search" id="globalSearchInput" placeholder="BUSCAR ARCHIVOS VECTORIALES..." class="search-input" data-target="true">
     <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" class="search-icon">
@@ -88,6 +95,7 @@
     </svg>
   </div>
 
+  <!-- Botones de Control Superiores -->
   <div class="header-controls">
     <button id="favBtn" class="icon-btn" data-target="true" title="Favoritos">
       <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
@@ -100,10 +108,12 @@
   </div>
 </header>
 
+<!-- ================= CONTENIDO PRINCIPAL (CONTACTO) ================= -->
 <main style="padding: 80px 5%; display: flex; flex-direction: column; align-items: center; min-height: 80vh;">
 
   <div style="width: 100%; max-width: 650px; position: relative;">
 
+    <!-- Encabezado de la Terminal de Contacto -->
     <div style="display: flex; justify-content: space-between; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 30px;">
       <div class="hero-badge" style="margin: 0; border-left-color: var(--secondary);">// TRANSMISIÓN_ENTRANTE</div>
       <span style="font-family: var(--font-tech); color: #666; font-size: 0.85rem; align-self: flex-end;">UPLINK: ESTABLE</span>
@@ -112,11 +122,14 @@
     <h1 class="glitch-title" style="font-size: 5rem; margin-bottom: 10px; color: var(--text-light); text-shadow: 3px 3px 0px var(--primary), -2px -2px 0px var(--secondary);">CONTACTO</h1>
     <p style="font-family: var(--font-tech); color: #AAA; margin-bottom: 40px; line-height: 1.6;">Ingrese sus credenciales y el paquete de datos a transmitir. El tiempo de respuesta del sistema dependerá de la congestión de la red local.</p>
 
+    <!-- Formulario Formspree -->
     <form action="https://formspree.io/f/xyklobnn" method="POST" style="background: rgba(0, 0, 0, 0.6); padding: 40px; border: 1px solid #333; position: relative;">
 
+      <!-- Decoraciones Tácticas de la caja -->
       <div style="position: absolute; top: -1px; left: -1px; width: 15px; height: 15px; border-top: 2px solid var(--primary); border-left: 2px solid var(--primary);"></div>
       <div style="position: absolute; bottom: -1px; right: -1px; width: 15px; height: 15px; border-bottom: 2px solid var(--primary); border-right: 2px solid var(--primary);"></div>
 
+      <!-- Inputs del Formulario -->
       <div style="margin-bottom: 25px;">
         <label class="terminal-label">[ IDENTIFICACIÓN ]</label>
         <input type="text" name="nombre" required placeholder="Ingresa tu ID_usuario" class="terminal-input" data-target="true">
@@ -139,7 +152,7 @@
   </div>
 </main>
 
-
+<!-- ================= MENÚ DE NAVEGACIÓN LATERAL ================= -->
 <nav class="side-menu" id="sideMenu" style="justify-content: flex-start; gap: 25px; overflow-y: auto; padding-top: 60px;">
   <button class="close-menu" id="closeMenuBtn" data-target="true">X</button>
 
@@ -148,6 +161,7 @@
     <h2 style="font-family: var(--font-heading); font-size: 2rem; margin: 0; line-height: 1; color: var(--text-light);">VECTOR<span class="highlight" style="color: var(--primary);">HEART</span></h2>
   </div>
 
+  <!-- Enlaces de Navegación -->
   <ul class="menu-links" style="margin-bottom: 10px;">
     <li><a href="index.html" data-target="true" style="display: flex; align-items: center; gap: 15px;"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg> INICIO</a></li>
     <li><a href="404.html" data-target="true" style="display: flex; align-items: center; gap: 15px;"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> LOGIN</a></li>
@@ -157,6 +171,7 @@
     <li><a href="contacto.html" data-target="true" style="display: flex; align-items: center; gap: 15px;"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg> CONTACTO</a></li>
   </ul>
 
+  <!-- Controles de Redes Sociales y Localización -->
   <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; border-top: 1px solid #333; padding-top: 25px;">
     <div class="side-socials" style="display: flex; gap: 15px; justify-content: center; width: 100%; margin: 0; padding: 0; border: none;">
       <a href="https://www.linkedin.com/in/juan-figueroa-98a816195/" target="_blank" data-target="true" title="LinkedIn"><svg viewBox="0 0 24 24" width="22" height="22" fill="white" class="social-icon" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
@@ -166,6 +181,7 @@
       <a href="https://www.instagram.com/0antonimo0/" target="_blank" data-target="true" title="Instagram"><img src="https://cdn.simpleicons.org/instagram/white" alt="Instagram" style="width: 22px; height: 22px;" class="social-icon"></a>
       <a href="https://www.tiktok.com/@erny_xp555" target="_blank" data-target="true" title="TikTok"><img src="https://cdn.simpleicons.org/tiktok/white" alt="TikTok" style="width: 22px; height: 22px;" class="social-icon"></a>
     </div>
+
     <div class="localization-controls" style="display: flex; gap: 10px; justify-content: center; width: 100%;">
       <button class="loc-btn" data-target="true" style="justify-content: center; padding: 10px 20px;">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.91-4.33-3.56zm2.95-8H5.08c-.96 1.66-2.49 2.93-4.33 3.56C5.81 7.11 6.28 5.92 6.6 4.68zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.34.16-2h4.68c.09.66.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>
@@ -181,6 +197,7 @@
   </div>
 </nav>
 
+<!-- ================= PANEL DE CARRITO DE COMPRAS ================= -->
 <div class="cart-panel" id="cartPanel">
   <div class="cart-header">
     <h2>REGISTRO DE COMPRAS</h2>
@@ -194,50 +211,59 @@
   </div>
 </div>
 
+<!-- ================= FOOTER GLOBAL ================= -->
 <footer class="main-footer" style="background: rgba(10, 10, 10, 0.95); border-top: 2px solid var(--primary); padding: 60px 5% 0px; margin-top: 80px; display: flex; flex-direction: column; position: relative; z-index: 10;">
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 80px; width: 100%; margin-bottom: 5px;">
 
-      <div class="footer-col" style="flex: 1.5; min-width: 380px;">
-        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-          <img src="assets/icons/Vectorheart.png" alt="Vectorheart Logo" class="heart-logo" style="height: 50px; width: auto; mix-blend-mode: screen;">
-          <h2 style="font-family: var(--font-heading); font-size: 2.6rem; margin: 0; line-height: 1; color: #FFF;">VECTOR<span style="color: var(--primary);">HEART</span></h2>
+  <!-- Contenedor Superior (Columnas de información) -->
+  <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 80px; width: 100%; margin-bottom: 5px;">
+
+    <!-- Columna 1: Branding -->
+    <div class="footer-col" style="flex: 1.5; min-width: 380px;">
+      <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+        <img src="assets/icons/Vectorheart.png" alt="Vectorheart Logo" class="heart-logo" style="height: 50px; width: auto; mix-blend-mode: screen;">
+        <h2 style="font-family: var(--font-heading); font-size: 2.6rem; margin: 0; line-height: 1; color: #FFF;">VECTOR<span style="color: var(--primary);">HEART</span></h2>
+      </div>
+      <p style="color: #AAA; font-family: var(--font-tech); font-size: 0.95rem; line-height: 1.6; max-width: 300px;">
+        Archivo de diseño táctico y arte cibernético. Todos los sistemas operando bajo protocolos de máxima seguridad.
+      </p>
+    </div>
+
+    <!-- Columna 2: Enlaces Rápidos -->
+    <div class="footer-col" style="flex: 1; min-width: 200px;">
+      <h4 style="color: var(--text-light); font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase;">Navegación</h4>
+      <ul class="footer-links" style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px;">
+        <li><a href="index.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Inicio del Sistema</a></li>
+        <li><a href="login.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Login de Usuario</a></li>
+        <li><a href="filosofia.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Filosofía y Misión</a></li>
+        <li><a href="index.html#catalog-grid" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Catálogo Vectorial</a></li>
+        <li><a href="servicios.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Servicios Tácticos</a></li>
+        <li><a href="contacto.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Contacto y Soporte</a></li>
+      </ul>
+    </div>
+
+    <!-- Columna 3: Información de Contacto -->
+    <div class="footer-col" style="flex: 1; min-width: 260px;">
+      <h4 style="color: var(--text-light); font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase;">Directorio</h4>
+      <div style="display: flex; flex-direction: column; gap: 18px;">
+        <div>
+          <span style="color: var(--primary); font-family: var(--font-tech); font-size: 0.8rem; letter-spacing: 1px; display: block; margin-bottom: 4px;">[ ENLACE_UPS_SUR ]</span>
+          <span style="color: #FFF; font-family: var(--font-tech); font-size: 0.95rem;">jfigueroam2@est.ups.edu.ec</span>
         </div>
-        <p style="color: #AAA; font-family: var(--font-tech); font-size: 0.95rem; line-height: 1.6; max-width: 300px;">
-          Archivo de diseño táctico y arte cibernético. Todos los sistemas operando bajo protocolos de máxima seguridad.
-        </p>
-      </div>
-
-      <div class="footer-col" style="flex: 1; min-width: 200px;">
-        <h4 style="color: var(--text-light); font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase;">Navegación</h4>
-        <ul class="footer-links" style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px;">
-          <li><a href="index.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Inicio del Sistema</a></li>
-          <li><a href="404.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Login de Usuario</a></li>
-          <li><a href="filosofia.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Filosofía y Misión</a></li>
-          <li><a href="index.html#catalog-grid" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Catálogo Vectorial</a></li>
-          <li><a href="servicios.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Servicios Tácticos</a></li>
-          <li><a href="contacto.html" data-target="true" style="color: #AAA; font-family: var(--font-tech); text-decoration: none; font-size: 0.95rem; transition: color 0.3s ease;">Contacto y Soporte</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-col" style="flex: 1; min-width: 260px;">
-        <h4 style="color: var(--text-light); font-family: var(--font-heading); font-size: 1.5rem; margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase;">Directorio</h4>
-        <div style="display: flex; flex-direction: column; gap: 18px;">
-          <div>
-            <span style="color: var(--primary); font-family: var(--font-tech); font-size: 0.8rem; letter-spacing: 1px; display: block; margin-bottom: 4px;">[ ENLACE_UPS_SUR ]</span>
-            <span style="color: #FFF; font-family: var(--font-tech); font-size: 0.95rem;">jfigueroam2@est.ups.edu.ec</span>
-          </div>
-          <div>
-            <span style="color: var(--primary); font-family: var(--font-tech); font-size: 0.8rem; letter-spacing: 1px; display: block; margin-bottom: 4px;">[ ENLACE_PERSONAL ]</span>
-            <span style="color: #FFF; font-family: var(--font-tech); font-size: 0.95rem;">juan.figueroa@gmail.com</span>
-          </div>
-          <div>
-            <span style="color: var(--primary); font-family: var(--font-tech); font-size: 0.8rem; letter-spacing: 1px; display: block; margin-bottom: 4px;">[ SOPORTE_SISTEMA ]</span>
-            <span style="color: #FFF; font-family: var(--font-tech); font-size: 0.95rem;">soporte@vectorheart.sys</span>
-          </div>
+        <div>
+          <span style="color: var(--primary); font-family: var(--font-tech); font-size: 0.8rem; letter-spacing: 1px; display: block; margin-bottom: 4px;">[ ENLACE_PERSONAL ]</span>
+          <span style="color: #FFF; font-family: var(--font-tech); font-size: 0.95rem;">juan.figueroa@gmail.com</span>
+        </div>
+        <div>
+          <span style="color: var(--primary); font-family: var(--font-tech); font-size: 0.8rem; letter-spacing: 1px; display: block; margin-bottom: 4px;">[ SOPORTE_SISTEMA ]</span>
+          <span style="color: #FFF; font-family: var(--font-tech); font-size: 0.95rem;">soporte@vectorheart.sys</span>
         </div>
       </div>
+    </div>
 
-    </div> <div class="side-socials" style="display: flex; gap: 25px; justify-content: center; width: 100%; padding: 25px 0; border-top: 1px solid #222; border-bottom: 1px solid #222; mix-blend-mode: screen; margin-bottom: 5px;">
+  </div>
+
+  <!-- Redes Sociales Footer -->
+  <div class="side-socials" style="display: flex; gap: 25px; justify-content: center; width: 100%; padding: 25px 0; border-top: 1px solid #222; border-bottom: 1px solid #222; mix-blend-mode: screen; margin-bottom: 5px;">
     <a href="https://www.linkedin.com/in/juan-figueroa-98a816195/" target="_blank" data-target="true" title="LinkedIn"><svg viewBox="0 0 24 24" width="24" height="24" fill="white" class="social-icon" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
     <a href="https://github.com/xErnyx" target="_blank" data-target="true" title="GitHub"><img src="https://cdn.simpleicons.org/github/white" alt="GitHub" style="width: 24px; height: 24px;" class="social-icon"></a>
     <a href="https://www.youtube.com/@Antonimo555" target="_blank" data-target="true" title="YouTube"><img src="https://cdn.simpleicons.org/youtube/white" alt="YouTube" style="width: 24px; height: 24px;" class="social-icon"></a>
@@ -245,20 +271,24 @@
     <a href="https://www.instagram.com/0antonimo0/" target="_blank" data-target="true" title="Instagram"><img src="https://cdn.simpleicons.org/instagram/white" alt="Instagram" style="width: 24px; height: 24px;" class="social-icon"></a>
     <a href="https://www.tiktok.com/@erny_xp555" target="_blank" data-target="true" title="TikTok"><img src="https://cdn.simpleicons.org/tiktok/white" alt="TikTok" style="width: 24px; height: 24px;" class="social-icon"></a>
   </div>
-  <article style="width: 100%;">
-      <div class="map-container" style="width: 100%; height: 350px; position: relative; border: 2px solid #333; margin-bottom: 40px;">
-        <div style="position: absolute; top: -1px; left: -1px; width: 15px; height: 15px; border-top: 2px solid var(--primary); border-left: 2px solid var(--primary); z-index: 5;"></div>
-        <div style="position: absolute; bottom: -1px; right: -1px; width: 15px; height: 15px; border-bottom: 2px solid var(--primary); border-right: 2px solid var(--primary); z-index: 5;"></div>
 
-        <iframe src="https://maps.google.com/maps?q=Universidad+Politecnica+Salesiana+Campus+Sur+Quito&t=&z=16&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0; filter: invert(90%) hue-rotate(180deg);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
+  <!-- Artículo de Ubicación Semántico (Práctica 2) -->
+  <article style="width: 100%;">
+    <div class="map-container" style="width: 100%; height: 350px; position: relative; border: 2px solid #333; margin-bottom: 40px;">
+      <div style="position: absolute; top: -1px; left: -1px; width: 15px; height: 15px; border-top: 2px solid var(--primary); border-left: 2px solid var(--primary); z-index: 5;"></div>
+      <div style="position: absolute; bottom: -1px; right: -1px; width: 15px; height: 15px; border-bottom: 2px solid var(--primary); border-right: 2px solid var(--primary); z-index: 5;"></div>
+
+      <iframe src="https://maps.google.com/maps?q=Universidad+Politecnica+Salesiana+Campus+Sur+Quito&t=&z=16&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0; filter: invert(90%) hue-rotate(180deg);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
   </article>
 </footer>
 
+<!-- ================= BASE DE COPYRIGHT ================= -->
 <div class="footer-bottom" style="background: #050505; text-align: center; padding: 20px; border-top: 1px solid #222; font-family: var(--font-tech); color: #555; font-size: 0.8rem; letter-spacing: 1px;">
   © 2026 VECTORHEART
 </div>
 
+<!-- ================= ARCHIVOS DE SCRIPT ================= -->
 <script src="js/app.js"></script>
 </body>
 </html>

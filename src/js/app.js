@@ -6,7 +6,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Mensaje oculto en la consola para los curiosos
+  // Mensaje oculto en la consola para los operadores curiosos
   console.log("%c[SYSTEM BOOT] Vectorheart V.3 // TACTICAL_HUD_ACTIVE.", "color: #D4FF00; font-family: monospace; font-size: 14px; font-weight: bold; background: #000; padding: 5px;");
 
   /* ==========================================================================
@@ -18,14 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.appendChild(cursor);
   const coords = document.getElementById('cursor-coords');
 
-  // Mueve el cursor siguiendo el ratón
+  // Mueve el cursor siguiendo las coordenadas del ratón en pantalla
   document.addEventListener('mousemove', (e) => {
     cursor.style.left = `${e.clientX}px`;
     cursor.style.top = `${e.clientY}px`;
     coords.textContent = `X:${e.clientX} Y:${e.clientY}`;
   });
 
-  // Función para que el cursor cambie al pasar sobre botones/enlaces
+  // Función global para inyectar la animación táctica de "hover" a elementos interactivos
   function attachCursorHover(elements) {
     elements.forEach(target => {
       target.addEventListener('mouseenter', () => {
@@ -40,14 +40,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   }
-  // Aplicamos el efecto hover a todos los elementos interactivos
+
+  // Aplicamos el efecto hover a todos los enlaces y botones renderizados inicialmente
   attachCursorHover(document.querySelectorAll('a, button, [data-target="true"]'));
 
 
   /* ==========================================================================
-   2. SISTEMA DE NAVEGACIÓN GLOBAL (MENÚ, CARRITO Y FAVORITOS)
-   ========================================================================== */
-// Selectores Visuales
+     2. SISTEMA DE NAVEGACIÓN GLOBAL (MENÚ LATERAL, CARRITO Y FAVORITOS)
+     ========================================================================== */
+  // Referencias al DOM (Navegación y Botonera Global)
   const menuBtn = document.getElementById('menuBtn');
   const closeMenuBtn = document.getElementById('closeMenuBtn');
   const sideMenu = document.getElementById('sideMenu');
@@ -56,27 +57,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const cartLink = document.querySelector('.cart-link');
   const cartPanel = document.getElementById('cartPanel');
   const closeCartBtn = document.getElementById('closeCartBtn');
-
   const favBtn = document.getElementById('favBtn');
 
-// --- Lógica del Menú Lateral ---
+  // --- 2.1 Lógica del Menú Lateral (Navegación Principal) ---
   if (menuBtn && closeMenuBtn && sideMenu) {
+    // Apertura y cierre del menú
     menuBtn.addEventListener('click', () => sideMenu.classList.add('active'));
     closeMenuBtn.addEventListener('click', () => sideMenu.classList.remove('active'));
 
-    // Cerrar al hacer clic fuera
+    // Cierre forzado al hacer clic fuera de la zona del menú
     document.addEventListener('click', (event) => {
       if (sideMenu.classList.contains('active') && !sideMenu.contains(event.target) && !menuBtn.contains(event.target)) {
         sideMenu.classList.remove('active');
       }
     });
 
-    // Cerrar automáticamente al hacer clic en un enlace
+    // Cierre inteligente tras hacer clic en un ancla o enlace interno
     menuLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         const targetUrl = link.getAttribute('href');
         sideMenu.classList.remove('active');
 
+        // Navegación suave a anclas (ej. "#catalog-grid")
         if (targetUrl.startsWith('#')) {
           e.preventDefault();
           const targetElement = document.querySelector(targetUrl);
@@ -88,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-// --- Lógica de Apertura del Carrito ---
+  // --- 2.2 Despliegue del Panel de Base de Datos (Carrito) ---
   if (cartLink && cartPanel && closeCartBtn) {
     cartLink.addEventListener('click', (e) => {
       e.preventDefault();
@@ -97,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     closeCartBtn.addEventListener('click', () => cartPanel.classList.remove('active'));
   }
 
-// --- Lógica de Favoritos ---
+  // --- 2.3 Handler para Sistema de Favoritos (Restringido) ---
   if (favBtn) {
     favBtn.addEventListener('click', (e) => {
       e.preventDefault();
@@ -107,58 +109,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ==========================================================================
-   3. CARGA DE BASE DE DATOS GLOBAL Y SINCRONIZACIÓN
-   ========================================================================== */
-  let artDatabase = [];
+     3. CONEXIÓN A BASE DE DATOS LOCAL (JSON) Y CARGA DE DATOS MUNDIALES
+     ========================================================================== */
+  let artDatabase = []; // Variable global de almacenamiento de obras de arte
 
-// Función asíncrona para cargar los datos en CUALQUIER página
   async function initSystemData() {
     try {
-      // Conectamos con el archivo JSON (Asegúrate de que la ruta sea correcta)
+      // Conexión fetch a la ruta JSON asíncrona
       const response = await fetch('data/productos.json');
       const data = await response.json();
-
-      // Guardamos los datos globalmente
       artDatabase = data;
 
-      // MAGIA: Una vez que la base de datos está llena, obligamos al carrito a dibujarse
+      // Sincronización Inmediata del Carrito desde LocalStorage (Para cualquier página)
       updateCartUI();
 
-      // (Opcional) Si estamos en el inicio y existe la función de dibujar el catálogo, la llamamos
+      // Disparador condicional: Si estamos en el home (index.html), renderizamos la tienda
       const catalogGrid = document.getElementById('catalog-grid');
       if (catalogGrid && typeof renderCatalog === 'function') {
         renderCatalog();
       }
-
     } catch (error) {
       console.error("SYS.ERR // Error de conexión con la base de datos de arte:", error);
     }
   }
 
-// Inicializamos el sistema en cuanto el archivo JS carga
+  // Ejecución de la rutina principal al cargar la aplicación
   initSystemData();
 
+
   /* ==========================================================================
-     4. CARRITO DE COMPRAS Y ALMACENAMIENTO (LOCALSTORAGE)
+     4. GESTIÓN DEL CARRITO DE COMPRAS Y LOCALSTORAGE
      ========================================================================== */
+  // Inicialización o recuperación de la memoria persistente del usuario
   let cart = JSON.parse(localStorage.getItem('vh_cart_items')) || [];
 
   const cartItemsContainer = document.getElementById('cartItemsContainer');
   const cartTotalValue = document.getElementById('cartTotalValue');
 
+  // Función que refresca el renderizado lateral del carrito calculando totales
   function updateCartUI() {
     if (cartPanel && cartLink) {
+      // Actualizamos contador/badge global
       const badge = document.getElementById('cartCountBadge');
       if (badge) badge.textContent = cart.length;
 
+      // Salvamos en la memoria caché persistente del navegador
       localStorage.setItem('vh_cart_items', JSON.stringify(cart));
+
+      // Limpiamos contenedor para redibujar
       cartItemsContainer.innerHTML = '';
       let total = 0;
 
+      // Manejo de estado vacío
       if(cart.length === 0) {
         cartItemsContainer.innerHTML = '<p style="color:#666; font-family:var(--font-tech); margin-top:20px; text-transform:uppercase; letter-spacing: 1px;">SISTEMA VACÍO</p>';
       }
 
+      // Dibujo de productos iterativo
       cart.forEach((productId, index) => {
         const product = artDatabase.find(p => p.id === productId);
         if(product) {
@@ -178,28 +185,30 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       cartTotalValue.textContent = total.toFixed(2);
+
+      // Adherimos interactividad a los botones recién generados (Borrar Elemento)
       attachRemoveLogic();
     } else {
-      // Si no estamos en una página con carrito, al menos guardamos los datos
+      // Sincronización silenciosa en páginas sin vista de carrito
       localStorage.setItem('vh_cart_items', JSON.stringify(cart));
     }
   }
 
+  // --- Funcionalidad de purga del carrito (Botones dinámicos) ---
   function attachRemoveLogic() {
     const removeBtns = document.querySelectorAll('.remove-item-btn');
-    // Se mantiene tu lógica original de cursores
     if (typeof attachCursorHover === 'function') attachCursorHover(removeBtns);
 
     removeBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         const itemIndex = btn.getAttribute('data-index');
         cart.splice(itemIndex, 1);
-        updateCartUI();
+        updateCartUI(); // Redibujar sistema
       });
     });
   }
 
-// Botón de Vaciar Carrito (Purgar Sistema)
+  // --- Funcionalidad de Borrado Masivo (Purga Total) ---
   const btnVaciar = document.getElementById('btn-vaciar-carrito');
   if (btnVaciar) {
     if (typeof attachCursorHover === 'function') attachCursorHover([btnVaciar]);
@@ -209,40 +218,39 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+
   /* ==========================================================================
-     5. RENDERIZADO DEL CATÁLOGO
+     5. RENDERIZADO CONDICIONAL DE TIENDA Y HERO (Exclusivo de INDEX.HTML)
      ========================================================================== */
   const catalogGrid = document.getElementById('catalog-grid');
 
   if (catalogGrid) {
+    // Función central de fetch y setup
     async function fetchArtCatalog() {
       try {
-        // Mensaje de carga limpio
         catalogGrid.innerHTML = '<div style="color:var(--primary); font-family:var(--font-heading); font-size:2rem; grid-column: 1 / -1; text-align:center;">CONECTANDO CON SERVIDOR...</div>';
-
         const response = await fetch('data/productos.json');
 
         if (!response.ok) throw new Error('Error en la conexión del servidor');
 
         artDatabase = await response.json();
-        renderCatalog();
-        updateCartUI();
-        initHeroCarousel();
+
+        renderCatalog();   // Módulo 5.1
+        updateCartUI();    // Módulo 4
+        initHeroCarousel(); // Módulo 5.3
 
       } catch (error) {
         console.error("Fallo de sistema:", error);
-        // Error limpio
         catalogGrid.innerHTML = '<div style="color:var(--primary); font-family:var(--font-heading); font-size:2rem; grid-column: 1 / -1; text-align:center;">ERROR DE CONEXIÓN: CATÁLOGO CORRUPTO</div>';
       }
     }
 
-    // RENDERIZADO DEL CATÁLOGO (Sección 5 - CORREGIDO)
+    // --- 5.1 Generación Dinámica del HTML de los Productos ---
     function renderCatalog() {
       catalogGrid.innerHTML = '';
-      const archiveItems = artDatabase.slice(5);
+      const archiveItems = artDatabase.slice(5); // Ignoramos los primeros 5 (exclusivos del Hero)
 
       archiveItems.forEach(product => {
-        // Recuperamos el estilo táctico del badge NUEVO
         const isNew = product.status === 'NUEVO' ? '<span style="color:var(--dark); font-family:var(--font-tech); font-weight:bold; font-size: 0.9rem; position:absolute; top:10px; left:10px; background:var(--primary); padding:5px 10px; z-index:20; letter-spacing:1px;">NUEVO</span>' : '';
         const cardHTML = `
       <div class="product-card">
@@ -261,19 +269,23 @@ document.addEventListener('DOMContentLoaded', () => {
         catalogGrid.innerHTML += cardHTML;
       });
 
+      // Adherir interactividad a elementos creados al vuelo
       attachCartAddLogic();
       attachModalLogic();
     }
 
+    // --- 5.2 Lógica visual y funcional al añadir al carrito ---
     function attachCartAddLogic() {
       const addButtons = document.querySelectorAll('.add-btn');
       attachCursorHover(addButtons);
+
       addButtons.forEach(button => {
         button.addEventListener('click', () => {
           const productId = button.getAttribute('data-id');
           cart.push(productId);
           updateCartUI();
 
+          // Efecto de confirmación estilo consola
           const originalText = button.textContent;
           const card = button.closest('.product-card');
 
@@ -282,6 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
           button.style.color = 'white';
           card.style.borderColor = 'var(--secondary)';
 
+          // Animación para atraer la vista del usuario
           if (cartPanel) cartPanel.classList.add('active');
 
           setTimeout(() => {
@@ -294,26 +307,25 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // ÚNICA LÓGICA DEL CARRUSEL (Orden de imágenes corregido)
+    // --- 5.3 Animador de Slider del Banner Superior (Hero) ---
     function initHeroCarousel() {
       const carouselContainer = document.getElementById('heroCarousel');
       if (!carouselContainer || artDatabase.length === 0) return;
 
-      const carouselItems = artDatabase.slice(0, 5);
+      const carouselItems = artDatabase.slice(0, 5); // Consumimos solo los primeros 5
       let currentIndex = 0;
 
-      // Ubicamos la línea de escáner para inyectar las fotos justo detrás de ella
       const scanline = carouselContainer.querySelector('.hero-scanline');
 
+      // Setup Inicial
       carouselItems.forEach((product, index) => {
         const img = document.createElement('img');
         img.src = product.image;
         img.className = 'carousel-img' + (index === 0 ? ' active' : '');
-
-        // ¡LA MAGIA ESTÁ AQUÍ! Mantiene el orden exacto 0, 1, 2, 3, 4
         carouselContainer.insertBefore(img, scanline);
       });
 
+      // Transición infinita
       const images = document.querySelectorAll('.carousel-img');
       if (images.length > 1) {
         setInterval(() => {
@@ -324,13 +336,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // INICIAMOS LA SECUENCIA
+    // Inicio forzado de la cadena
     fetchArtCatalog();
   }
 
 
   /* ==========================================================================
-     6. HUD DE INSPECCIÓN (MODAL)
+     6. SISTEMA DE MODAL TÁCTICO PARA INSPECCIÓN (PANTALLA COMPLETA)
      ========================================================================== */
   const modal = document.getElementById('artModal');
   const closeModalBtn = document.getElementById('closeModalBtn');
@@ -345,12 +357,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const product = artDatabase.find(p => p.id === productId);
 
         if (product && modal) {
+          // Poblamiento de Datos en Modal
           document.getElementById('modalTitle').textContent = product.title;
           document.getElementById('modalArtist').textContent = product.artist;
           document.getElementById('modalExhibitions').textContent = product.exhibitions;
           document.getElementById('modalDesc').textContent = product.desc;
           document.getElementById('modalImage').innerHTML = `<img src="${product.image}" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%) contrast(120%);">`;
 
+          // Generación de estrellas en base al rating
           let starsHTML = '';
           for (let i = 1; i <= 5; i++) { starsHTML += i <= product.rating ? '★' : '☆'; }
           document.getElementById('modalRating').textContent = starsHTML;
@@ -361,13 +375,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Cierre manual del modal
   if (closeModalBtn && modal) {
     closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
   }
 
 
   /* ==========================================================================
-     7. MODO TÁCTICO: ATAJOS DE TECLADO
+     7. SOPORTE DE TECLADO TÁCTICO (Cierres con Escape)
      ========================================================================== */
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
@@ -379,8 +394,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ==========================================================================
-     8. SECUENCIA DE INICIO AL CARGAR
+     8. FINALIZACIÓN Y VERIFICACIÓN POST-CARGA
      ========================================================================== */
-  updateCartUI();
+  updateCartUI(); // Verificación redundante por seguridad de renderizado
 
 });
