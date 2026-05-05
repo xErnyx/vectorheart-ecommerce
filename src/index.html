@@ -31,12 +31,21 @@
     <img src="assets/icons/Vectorheart.png" alt="Vectorheart Logo" class="heart-logo">
   </a>
 
-  <!-- Barra de búsqueda global -->
-  <div class="header-search-container">
-    <input type="search" id="searchInput" placeholder="BUSCAR ARCHIVOS VECTORIALES..." class="search-input" data-target="true">
+  <!-- Barra de búsqueda global (Estilo Pinterest Táctico) -->
+  <div class="header-search-container" id="searchContainer">
+    <input type="search" id="searchInput" placeholder="BUSCAR ARCHIVOS VECTORIALES..." class="search-input" data-target="true" autocomplete="off">
+
+    <!-- Botón X para limpiar -->
+    <button id="clearSearchBtn" class="clear-search-btn" style="display: none;" data-target="true">X</button>
+
     <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" class="search-icon">
       <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
     </svg>
+
+    <!-- Menú Desplegable Predictivo -->
+    <div class="search-dropdown" id="searchDropdown">
+      <!-- Se llena dinámicamente con JS -->
+    </div>
   </div>
 
   <!-- Botones de control (Favoritos, Base de Datos/Carrito, Menú Lateral) -->
@@ -68,22 +77,63 @@
     <div class="hero-art-display" id="heroCarousel"></div>
   </section>
 
-  <!-- Sección de Catálogo (Grilla de productos) -->
-  <section class="catalog">
-    <h2 class="section-title">ARCHIVO GENERAL // CATALOG</h2>
+  <!-- Sección de Catálogo con Sidebar -->
+  <section class="catalog-container" id="catalog-section">
 
-    <!-- NUEVO: PANEL DE FILTROS PARA LA API -->
-    <div class="filter-panel" id="filterPanel">
-      <span class="filter-label">// BÚSQUEDA VECTORIAL:</span>
-      <button class="filter-btn active" data-query="Contemporary Art">CONTEMPORÁNEO</button>
-      <button class="filter-btn" data-query="Digital">DIGITAL</button>
-      <button class="filter-btn" data-query="Pop Art">POP ART</button>
-      <button class="filter-btn" data-query="Cyberpunk">CYBERPUNK</button>
-      <button class="filter-btn" data-query="Photography">FOTOGRAFÍA</button>
+    <!-- SIDEBAR DE FILTROS AVANZADOS (ESTILO STEAM) -->
+    <aside class="filter-sidebar">
+      <div class="sidebar-title">FILTROS</div>
+      <div class="sidebar-matches" id="matchCount">ESPERANDO RED...</div>
+
+      <!-- Sección: Categoría -->
+      <div class="filter-section">
+        <div class="filter-section-title">GÉNEROS <span style="font-size: 0.7rem;">▼</span></div>
+        <label class="filter-option"><input type="radio" name="cat" value="cyberpunk neon" checked><span class="active">Cyberpunk</span></label>
+        <label class="filter-option"><input type="radio" name="cat" value="digital art"><span>Arte Digital</span></label>
+        <label class="filter-option"><input type="radio" name="cat" value="vaporwave"><span>Vaporwave</span></label>
+        <label class="filter-option"><input type="radio" name="cat" value="abstract 3d"><span>3D Abstracto</span></label>
+        <label class="filter-option"><input type="radio" name="cat" value="mecha robot"><span>Mecánica / Robots</span></label>
+      </div>
+
+      <!-- Sección: Color Base -->
+      <div class="filter-section">
+        <div class="filter-section-title">ESPECTRO DE COLOR <span style="font-size: 0.7rem;">▼</span></div>
+        <label class="filter-option"><input type="radio" name="col" value="" checked><span class="active">Cualquiera</span></label>
+        <label class="filter-option"><input type="radio" name="col" value="black"><span>Oscuro / Negro</span></label>
+        <label class="filter-option"><input type="radio" name="col" value="magenta"><span>Magenta / Neón</span></label>
+        <label class="filter-option"><input type="radio" name="col" value="teal"><span>Teal / Cyan</span></label>
+      </div>
+
+      <!-- Sección: Orientación -->
+      <div class="filter-section">
+        <div class="filter-section-title">FORMATO <span style="font-size: 0.7rem;">▼</span></div>
+        <label class="filter-option"><input type="radio" name="ori" value="landscape" checked><span class="active">Apaisado</span></label>
+        <label class="filter-option"><input type="radio" name="ori" value="portrait"><span>Retrato</span></label>
+        <label class="filter-option"><input type="radio" name="ori" value="squarish"><span>Cuadrado</span></label>
+      </div>
+
+      <!-- Sección: Precio (Frontend Filter) -->
+      <div class="filter-section">
+        <div class="filter-section-title">PRECIO MÁXIMO</div>
+        <div class="price-slider-container">
+          <span class="price-label" id="priceLabel">Cualquier precio</span>
+          <input type="range" id="priceFilter" min="40" max="200" value="200" data-target="true">
+        </div>
+      </div>
+
+      <!-- Botón de Limpieza Rápida -->
+      <button class="btn-clear-filters" id="clearFiltersBtn" data-target="true">LIMPIAR FILTROS</button>
+    </aside>
+
+    <!-- ÁREA DE PRODUCTOS -->
+    <div class="catalog-content">
+      <h2 class="section-title" style="font-size: 3rem; margin-top: 0;">ARCHIVO GENERAL</h2>
+      <!-- Cuadrícula -->
+      <div class="product-grid" id="catalog-grid"></div>
+      <!-- Botón Cargar Más -->
+      <button class="btn-load-more" id="loadMoreBtn" data-target="true">CARGAR MÁS MÓDULOS</button>
     </div>
 
-    <!-- Cuadrícula dinámica generada por app.js -->
-    <div class="product-grid" id="catalog-grid"></div>
   </section>
 </main>
 
