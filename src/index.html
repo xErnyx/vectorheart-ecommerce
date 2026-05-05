@@ -33,7 +33,7 @@
 
   <!-- Barra de búsqueda global -->
   <div class="header-search-container">
-    <input type="search" id="globalSearchInput" placeholder="BUSCAR ARCHIVOS VECTORIALES..." class="search-input" data-target="true">
+    <input type="search" id="searchInput" placeholder="BUSCAR ARCHIVOS VECTORIALES..." class="search-input" data-target="true">
     <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" class="search-icon">
       <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
     </svg>
@@ -71,6 +71,17 @@
   <!-- Sección de Catálogo (Grilla de productos) -->
   <section class="catalog">
     <h2 class="section-title">ARCHIVO GENERAL // CATALOG</h2>
+
+    <!-- NUEVO: PANEL DE FILTROS PARA LA API -->
+    <div class="filter-panel" id="filterPanel">
+      <span class="filter-label">// BÚSQUEDA VECTORIAL:</span>
+      <button class="filter-btn active" data-query="Contemporary Art">CONTEMPORÁNEO</button>
+      <button class="filter-btn" data-query="Digital">DIGITAL</button>
+      <button class="filter-btn" data-query="Pop Art">POP ART</button>
+      <button class="filter-btn" data-query="Cyberpunk">CYBERPUNK</button>
+      <button class="filter-btn" data-query="Photography">FOTOGRAFÍA</button>
+    </div>
+
     <!-- Cuadrícula dinámica generada por app.js -->
     <div class="product-grid" id="catalog-grid"></div>
   </section>
