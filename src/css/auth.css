@@ -67,10 +67,10 @@ input[type="color"].form-input { height: 48px; padding: 2px 5px; cursor: none; }
 @keyframes glitch-error { 0% { transform: translateX(-1px); } 100% { transform: translateX(1px); } }
 
 /* ================= 7. COMPATIBILIDAD DE NAVEGADOR Y FIXES ================= */
-/* Restauración de Cursor para inputs nativos */
-.auth-container * { cursor: auto !important; }
-.form-input { cursor: text !important; }
-select.form-input, input[type="color"].form-input, input[type="radio"], .radio-label, .btn-submit, .btn-reset, .btn-register-link, .btn-register-solid, .btn-guest-outline { cursor: pointer !important; }
+/* Integración estricta del Cursor Táctico Global */
+.auth-container * { cursor: none !important; }
+.form-input { cursor: none !important; }
+select.form-input, input[type="color"].form-input, input[type="radio"], .radio-label, .btn-submit, .btn-reset, .btn-register-link, .btn-register-solid, .btn-guest-outline { cursor: none !important; }
 
 /* Fixes de Sistema Nativo */
 input[type="month"].form-input, input[type="color"].form-input { color-scheme: dark; }
