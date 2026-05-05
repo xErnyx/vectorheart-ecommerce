@@ -181,10 +181,17 @@
     <button class="close-cart" id="closeCartBtn" data-target="true">X</button>
   </div>
   <div class="cart-items-container" id="cartItemsContainer"></div>
+
   <div class="cart-footer">
     <div class="cart-total">TOTAL: $<span id="cartTotalValue">0.00</span></div>
-    <button id="btn-vaciar-carrito" class="btn-vaciar" data-target="true">PURGAR SISTEMA</button>
-    <button class="btn-primary" style="width: 100%; margin-top: 15px;" data-target="true">PROCESAR PAGO >></button>
+
+    <!-- NUEVOS BOTONES INFERIORES -->
+    <div class="cart-bottom-actions">
+      <button id="btn-undo-cart" class="btn-undo" data-target="true">RESTAR ÚLTIMO</button>
+      <button id="btn-vaciar-carrito" class="btn-purgar" data-target="true">PURGAR SISTEMA</button>
+    </div>
+
+    <button class="btn-primary" style="width: 100%;" data-target="true">PROCESAR PAGO >></button>
   </div>
 </div>
 

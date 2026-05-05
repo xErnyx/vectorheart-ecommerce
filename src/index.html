@@ -76,24 +76,44 @@
   </section>
 </main>
 
-<!-- ================= MODAL DE DETALLE DE OBRA ================= -->
+<!-- ================= MODAL DE DETALLE DE OBRA (DISEÑO VERTICAL EDITORIAL) ================= -->
 <div class="modal-overlay" id="artModal">
   <div class="modal-content">
-    <button class="modal-close" id="closeModalBtn" data-target="true">X</button>
-    <div class="modal-layout">
-      <!-- Visor de imagen con línea de escaneo -->
-      <div class="modal-image-container">
-        <div class="modal-image" id="modalImage"></div>
-        <div class="scan-line"></div>
-      </div>
-      <!-- Datos técnicos de la obra -->
-      <div class="modal-info">
+
+    <!-- Botón de Cierre -->
+    <button class="modal-close-btn" id="closeModalBtn" data-target="true" title="Cerrar Terminal">X</button>
+
+    <!-- Contenedor con Scroll Global -->
+    <div class="modal-body-scroll">
+
+      <!-- 1. Encabezado / Título -->
+      <div class="modal-header-vertical">
+        <div class="modal-badge">// REGISTRO VECTORIAL</div>
         <h2 id="modalTitle">TITULO OBRA</h2>
-        <p class="modal-data">ARTISTA: <span id="modalArtist">...</span></p>
-        <p class="modal-data">EXPOSICIONES: <span id="modalExhibitions">...</span></p>
+      </div>
+
+      <!-- 2. Imagen -->
+      <div class="modal-image-vertical">
+        <div class="modal-image" id="modalImage"></div>
+      </div>
+
+      <!-- 3. Metadatos (Artista y Exposición) -->
+      <div class="modal-data-vertical">
+        <p class="modal-data"><span>[ ARTISTA ]</span> <strong id="modalArtist">...</strong></p>
+        <p class="modal-data"><span>[ EXPOSICIÓN ]</span> <strong id="modalExhibitions">...</strong></p>
+      </div>
+
+      <!-- 4. Estrellas / Rating -->
+      <div class="modal-rating-vertical">
+        <span style="color: #666; font-size: 0.85rem; font-family: var(--font-tech); width: 135px; flex-shrink: 0;">NIVEL DE AMENAZA:</span>
         <div class="modal-rating" id="modalRating">★★★★★</div>
+      </div>
+
+      <!-- 5. Descripción a todo lo ancho -->
+      <div class="modal-desc-vertical">
         <p class="modal-desc" id="modalDesc">Cargando registro de datos...</p>
       </div>
+
     </div>
   </div>
 </div>
@@ -136,17 +156,24 @@
   </div>
 </nav>
 
-<!-- ================= PANEL DEL CARRITO DE COMPRAS ================= -->
+<!-- ================= PANEL DE CARRITO DE COMPRAS ================= -->
 <div class="cart-panel" id="cartPanel">
   <div class="cart-header">
     <h2>REGISTRO DE COMPRAS</h2>
     <button class="close-cart" id="closeCartBtn" data-target="true">X</button>
   </div>
   <div class="cart-items-container" id="cartItemsContainer"></div>
+
   <div class="cart-footer">
     <div class="cart-total">TOTAL: $<span id="cartTotalValue">0.00</span></div>
-    <button id="btn-vaciar-carrito" class="btn-vaciar" data-target="true">PURGAR SISTEMA</button>
-    <button class="btn-primary" style="width: 100%; margin-top: 15px;" data-target="true">PROCESAR PAGO >></button>
+
+    <!-- NUEVOS BOTONES INFERIORES -->
+    <div class="cart-bottom-actions">
+      <button id="btn-undo-cart" class="btn-undo" data-target="true">RESTAR ÚLTIMO</button>
+      <button id="btn-vaciar-carrito" class="btn-purgar" data-target="true">PURGAR SISTEMA</button>
+    </div>
+
+    <button class="btn-primary" style="width: 100%;" data-target="true">PROCESAR PAGO >></button>
   </div>
 </div>
 

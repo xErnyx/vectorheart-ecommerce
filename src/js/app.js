@@ -138,46 +138,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ==========================================================================
-     4. GESTIÓN DEL CARRITO DE COMPRAS Y LOCALSTORAGE
+     4. GESTIÓN DEL CARRITO DE COMPRAS (CANTIDADES Y AGRUPACIÓN)
      ========================================================================== */
-  // Inicialización o recuperación de la memoria persistente del usuario
   let cart = JSON.parse(localStorage.getItem('vh_cart_items')) || [];
 
   const cartItemsContainer = document.getElementById('cartItemsContainer');
   const cartTotalValue = document.getElementById('cartTotalValue');
 
-  // Función que refresca el renderizado lateral del carrito calculando totales
   function updateCartUI() {
     if (cartPanel && cartLink) {
-      // Actualizamos contador/badge global
       const badge = document.getElementById('cartCountBadge');
       if (badge) badge.textContent = cart.length;
 
-      // Salvamos en la memoria caché persistente del navegador
       localStorage.setItem('vh_cart_items', JSON.stringify(cart));
-
-      // Limpiamos contenedor para redibujar
       cartItemsContainer.innerHTML = '';
       let total = 0;
 
-      // Manejo de estado vacío
       if(cart.length === 0) {
         cartItemsContainer.innerHTML = '<p style="color:#666; font-family:var(--font-tech); margin-top:20px; text-transform:uppercase; letter-spacing: 1px;">SISTEMA VACÍO</p>';
+        cartTotalValue.textContent = "0.00";
+        return;
       }
 
-      // Dibujo de productos iterativo
-      cart.forEach((productId, index) => {
+      // MAGIA: Agrupamos los IDs para contar las cantidades
+      const groupedCart = {};
+      cart.forEach(id => { groupedCart[id] = (groupedCart[id] || 0) + 1; });
+
+      // Dibujamos el carrito basado en los grupos
+      Object.keys(groupedCart).forEach(productId => {
+        const qty = groupedCart[productId];
         const product = artDatabase.find(p => p.id === productId);
+
         if(product) {
-          total += product.price;
+          total += (product.price * qty);
           const itemHTML = `
                 <div class="cart-item">
                     <img src="${product.image}" alt="${product.title}">
                     <div class="cart-item-info">
                         <h4>${product.title}</h4>
                         <p>$${product.price.toFixed(2)}</p>
+
+                        <!-- Controles de Cantidad -->
+                        <div class="cart-item-qty">
+                           <button class="qty-btn minus-btn" data-id="${product.id}">-</button>
+                           <span style="font-family: var(--font-tech); font-size: 0.95rem; width: 20px; text-align: center;">${qty}</span>
+                           <button class="qty-btn plus-btn" data-id="${product.id}">+</button>
+                        </div>
                     </div>
-                    <button class="remove-item-btn" data-index="${index}" data-target="true">X</button>
+                    <button class="remove-item-btn" data-id="${product.id}" data-target="true">Eliminar</button>
                 </div>
             `;
           cartItemsContainer.innerHTML += itemHTML;
@@ -185,30 +193,56 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       cartTotalValue.textContent = total.toFixed(2);
-
-      // Adherimos interactividad a los botones recién generados (Borrar Elemento)
-      attachRemoveLogic();
+      attachCartControls();
     } else {
-      // Sincronización silenciosa en páginas sin vista de carrito
       localStorage.setItem('vh_cart_items', JSON.stringify(cart));
     }
   }
 
-  // --- Funcionalidad de purga del carrito (Botones dinámicos) ---
-  function attachRemoveLogic() {
-    const removeBtns = document.querySelectorAll('.remove-item-btn');
-    if (typeof attachCursorHover === 'function') attachCursorHover(removeBtns);
-
-    removeBtns.forEach(btn => {
+  // --- Funcionalidad de Botones Internos (+, -, Eliminar) ---
+  function attachCartControls() {
+    // Botón [+]
+    document.querySelectorAll('.plus-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const itemIndex = btn.getAttribute('data-index');
-        cart.splice(itemIndex, 1);
-        updateCartUI(); // Redibujar sistema
+        cart.push(btn.getAttribute('data-id'));
+        updateCartUI();
+      });
+    });
+
+    // Botón [-] (Busca el último de ese ID y lo borra)
+    document.querySelectorAll('.minus-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        const index = cart.lastIndexOf(id);
+        if (index !== -1) {
+          cart.splice(index, 1);
+          updateCartUI();
+        }
+      });
+    });
+
+    // Botón [Eliminar] (Borra TODOS los de ese ID)
+    document.querySelectorAll('.remove-item-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        cart = cart.filter(item => item !== id); // Filtra y deja solo los que NO sean este ID
+        updateCartUI();
       });
     });
   }
 
-  // --- Funcionalidad de Borrado Masivo (Purga Total) ---
+  // --- Botones Inferiores Globales ---
+  const btnUndo = document.getElementById('btn-undo-cart');
+  if (btnUndo) {
+    if (typeof attachCursorHover === 'function') attachCursorHover([btnUndo]);
+    btnUndo.addEventListener('click', () => {
+      if (cart.length > 0) {
+        cart.pop(); // Elimina literalmente el último elemento del array general
+        updateCartUI();
+      }
+    });
+  }
+
   const btnVaciar = document.getElementById('btn-vaciar-carrito');
   if (btnVaciar) {
     if (typeof attachCursorHover === 'function') attachCursorHover([btnVaciar]);
@@ -248,17 +282,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 5.1 Generación Dinámica del HTML de los Productos ---
     function renderCatalog() {
       catalogGrid.innerHTML = '';
-      const archiveItems = artDatabase.slice(5); // Ignoramos los primeros 5 (exclusivos del Hero)
+      const archiveItems = artDatabase.slice(5);
 
       archiveItems.forEach(product => {
         const isNew = product.status === 'NUEVO' ? '<span style="color:var(--dark); font-family:var(--font-tech); font-weight:bold; font-size: 0.9rem; position:absolute; top:10px; left:10px; background:var(--primary); padding:5px 10px; z-index:20; letter-spacing:1px;">NUEVO</span>' : '';
+
+        // Fíjate que aquí agregamos el <div class="scan-text">
         const cardHTML = `
       <div class="product-card">
           <div class="card-header"><span class="serial">#${product.id}</span><span class="status-dot"></span></div>
           <div class="product-image modal-trigger" data-id="${product.id}" data-target="true">
               <img src="${product.image}" alt="${product.title}" class="real-art-img">
               ${isNew}
-              <div class="scan-overlay">INSPECCIONAR</div>
+              <div class="scan-overlay"><div class="scan-text">INSPECCIONAR</div></div>
           </div>
           <div class="product-info">
               <h3>${product.title}</h3><p class="price">$${product.price.toFixed(2)}</p>
@@ -269,7 +305,6 @@ document.addEventListener('DOMContentLoaded', () => {
         catalogGrid.innerHTML += cardHTML;
       });
 
-      // Adherir interactividad a elementos creados al vuelo
       attachCartAddLogic();
       attachModalLogic();
     }
@@ -285,23 +320,25 @@ document.addEventListener('DOMContentLoaded', () => {
           cart.push(productId);
           updateCartUI();
 
-          // Efecto de confirmación estilo consola
           const originalText = button.textContent;
           const card = button.closest('.product-card');
 
+          // ADIÓS MORADO: Ahora el botón de compra se vuelve Blanco Sólido
           button.textContent = 'DATOS GUARDADOS';
-          button.style.backgroundColor = 'var(--secondary)';
-          button.style.color = 'white';
-          card.style.borderColor = 'var(--secondary)';
+          button.style.backgroundColor = '#FFF';
+          button.style.color = '#000';
+          button.style.borderColor = '#FFF';
+          card.style.borderColor = '#FFF';
 
-          // Animación para atraer la vista del usuario
           if (cartPanel) cartPanel.classList.add('active');
 
+          // Regresa a su estado original después de 1 segundo
           setTimeout(() => {
             button.textContent = originalText;
-            button.style.backgroundColor = 'var(--gray)';
+            button.style.backgroundColor = 'transparent';
             button.style.color = 'var(--text-light)';
-            card.style.borderColor = 'var(--primary)';
+            button.style.borderColor = '#555';
+            card.style.borderColor = '#333';
           }, 1000);
         });
       });
