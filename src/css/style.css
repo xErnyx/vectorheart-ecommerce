@@ -216,7 +216,7 @@ body, a, button, .close-menu, .lang-btn, .social-icon, img, input { cursor: none
 /* 3. Metadatos (Artista / Exposición) */
 .modal-data-vertical { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; border-bottom: 1px dashed #333; padding-bottom: 25px; }
 .modal-data { display: flex; align-items: baseline; margin: 0; font-size: 1.1rem; color: var(--text-light); font-family: var(--font-tech); }
-.modal-data span { color: #666; font-size: 0.85rem; flex-shrink: 0; width: 135px; }
+.modal-data span { color: #AAA; font-size: 0.85rem; flex-shrink: 0; width: 135px; }
 .modal-data strong { color: var(--primary); font-weight: normal; }
 
 /* 4. Estrellas */
@@ -299,7 +299,7 @@ body, a, button, .close-menu, .lang-btn, .social-icon, img, input { cursor: none
   z-index: 1000; max-height: 350px; overflow-y: auto; padding: 10px;
 }
 .search-dropdown.active { display: flex; }
-.dropdown-title { color: #888; font-size: 0.8rem; margin: 10px 10px 5px; font-family: var(--font-heading); text-transform: uppercase; }
+.dropdown-title { color: #AAA; font-size: 0.8rem; margin: 10px 10px 5px; font-family: var(--font-heading); text-transform: uppercase; }
 
 /* Items del buscador (Recientes y Autocompletado) */
 .search-suggestion-item {
@@ -347,7 +347,7 @@ body, a, button, .close-menu, .lang-btn, .social-icon, img, input { cursor: none
 .footer-branding { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
 .v-logo { background: var(--primary); color: var(--dark); width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: 1.5rem; }
 .footer-branding h2 { font-family: var(--font-heading); font-size: 2.5rem; letter-spacing: -1px; line-height: 1; }
-.copyright { color: #666; font-size: 0.9rem; margin-bottom: 5px; font-family: var(--font-tech); }
+.copyright { color: #999; font-size: 0.9rem; margin-bottom: 5px; font-family: var(--font-tech); }
 .update-date { font-size: 0.75rem; color: var(--secondary); font-family: var(--font-tech); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
 .localization-controls { display: flex; gap: 15px; }
 .loc-btn { display: flex; align-items: center; gap: 10px; background: #1A1A1A; border: 1px solid #333; color: #AAA; padding: 12px 24px; font-family: var(--font-tech); font-size: 1rem; transition: all 0.3s ease; border-radius: 6px; }
@@ -367,7 +367,7 @@ body, a, button, .close-menu, .lang-btn, .social-icon, img, input { cursor: none
 .footer-links a:hover::before { opacity: 1; margin-right: 10px; transform: translateX(0); }
 .footer-contact-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 15px; font-family: var(--font-tech); font-size: 0.9rem; color: #AAA; }
 .footer-contact-list strong { color: var(--primary); display: inline-block; width: 90px; }
-.footer-bottom { background: #050505; text-align: center; padding: 20px; border-top: 1px solid #222; font-family: var(--font-tech); color: #555; font-size: 0.8rem; letter-spacing: 1px; }
+.footer-bottom { background: #050505; text-align: center; padding: 20px; border-top: 1px solid #222; font-family: var(--font-tech); color: #999; font-size: 0.8rem; letter-spacing: 1px; }
 
 @media (max-width: 768px) { .footer-layout { grid-template-columns: 1fr; } .footer-info { align-items: flex-start; text-align: left; margin-top: 30px; } }
 

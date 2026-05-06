@@ -139,7 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
       let total = 0;
 
       if(cart.length === 0) {
-        cartItemsContainer.innerHTML = '<p style="color:#666; font-family:var(--font-tech); margin-top:20px; text-transform:uppercase; letter-spacing: 1px;">SISTEMA VACÍO</p>';
+        // FIX ACCESIBILIDAD 2: Cambio de color #666 a #AAA para superar el contraste
+        cartItemsContainer.innerHTML = '<p style="color:#AAA; font-family:var(--font-tech); margin-top:20px; text-transform:uppercase; letter-spacing: 1px;">SISTEMA VACÍO</p>';
         cartTotalValue.textContent = "0.00";
         return;
       }
@@ -512,7 +513,9 @@ document.addEventListener('DOMContentLoaded', () => {
       carouselContainer.innerHTML = '';
       artDatabase.slice(0, 5).forEach((product, i) => {
         const img = document.createElement('img');
-        img.src = product.image; img.className = 'carousel-img' + (i === 0 ? ' active' : '');
+        img.src = product.image;
+        img.alt = `Obra destacada: ${product.title}`; // <--- FIX ACCESIBILIDAD 1
+        img.className = 'carousel-img' + (i === 0 ? ' active' : '');
         carouselContainer.appendChild(img);
       });
       const images = carouselContainer.querySelectorAll('.carousel-img');
