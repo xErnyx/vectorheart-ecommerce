@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector('input[name="col"][value=""]').checked = true;
       document.querySelector('input[name="ori"][value="landscape"]').checked = true;
       updateSidebarActiveClasses();
-      executeAPI(query, true); // True = limpiar catálogo previo
+      window.executeAPI(query, true); // True = limpiar catálogo previo
     };
 
     // --- Lógica del SIDEBAR de Filtros ---
@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const cat = document.querySelector('input[name="cat"]:checked').value;
         currentQuery = cat;
         if(searchInput) { searchInput.value = ''; clearSearchBtn.style.display = 'none'; }
-        executeAPI(currentQuery, true); // true = reiniciar grid
+        window.executeAPI(currentQuery, true); // true = reiniciar grid
       });
     });
 
@@ -342,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(loadMoreBtn) {
       if (typeof attachCursorHover === 'function') attachCursorHover([loadMoreBtn]);
       loadMoreBtn.addEventListener('click', () => {
-        executeAPI(currentQuery, false); // false = añadir a lo existente
+        window.executeAPI(currentQuery, false); // false = añadir a lo existente
       });
     }
 
@@ -357,12 +357,12 @@ document.addEventListener('DOMContentLoaded', () => {
         priceLabel.textContent = "Cualquier precio";
         if(searchInput) { searchInput.value = ''; clearSearchBtn.style.display = 'none'; }
         updateSidebarActiveClasses();
-        executeAPI("cyberpunk neon", true);
+        window.executeAPI("cyberpunk neon", true);
       });
     }
 
     // --- Ejecutor Central de la API ---
-    async function executeAPI(query, isNewSearch = true) {
+    window.executeAPI = async function(query, isNewSearch = true) {
       try {
         if (isNewSearch) {
           currentPage = 1;
@@ -392,16 +392,44 @@ document.addEventListener('DOMContentLoaded', () => {
           let itemTitle = item.description || item.alt_description || `ARCHIVO-${item.id.substring(0,4)}`;
           if (itemTitle.length > 30) itemTitle = itemTitle.substring(0, 30) + '...';
 
+          // --- NUEVA LÓGICA INTELIGENTE DE ETIQUETAS ---
+          let extractedTags = [];
+
+          // 1. Si Unsplash nos da tags reales, los usamos
+          if (item.tags && item.tags.length > 0) {
+            extractedTags = item.tags.slice(0, 4).map(t => t.title);
+          }
+          // 2. Si no hay tags, usamos las palabras más largas de la descripción como tags
+          else if (item.alt_description) {
+            extractedTags = item.alt_description
+              .replace(/[^a-zA-Z\s]/g, '') // Quitamos comas o puntos
+              .split(' ')
+              .filter(word => word.length > 4) // Solo palabras de más de 4 letras
+              .slice(0, 3); // Tomamos máximo 3
+          }
+          // 3. Fallback absoluto de emergencia
+          else {
+            extractedTags = ["VECTOR", "SISTEMA", "OP-01"];
+          }
+
           return {
             id: `VH-${item.id.substring(0, 5).toUpperCase()}`,
             title: itemTitle.toUpperCase(),
             artist: item.user.username,
             exhibitions: `Captura Visual / Año ${new Date(item.created_at).getFullYear()}`,
-            desc: item.alt_description || "Datos corruptos o no disponibles.",
+            desc: item.alt_description || "Datos corruptos o no disponibles en el servidor remoto.",
             image: item.urls.regular,
             price: priceCalc,
             rating: (item.likes % 3) + 3,
-            status: (index % 5 === 0) ? 'NUEVO' : 'ESTANDAR'
+            status: (index % 5 === 0) ? 'NUEVO' : 'ESTANDAR',
+
+            // --- DATOS TÁCTICOS ---
+            hexColor: item.color || "#000000",
+            dimensions: `${item.width} x ${item.height} PX`,
+            likes: item.likes,
+
+            // Inyectamos los tags inteligentes que acabamos de generar
+            tags: extractedTags
           };
         });
 
@@ -500,7 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ARRANQUE INICIAL DEL SISTEMA
-    executeAPI(currentQuery, true);
+    window.executeAPI(currentQuery, true);
   }
 
 
@@ -510,9 +538,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById('artModal');
   const closeModalBtn = document.getElementById('closeModalBtn');
 
+  // Función para cerrar el modal y buscar un tag (Exportada al objeto window)
+  window.searchFromTag = function(tagWord) {
+    if (modal) modal.classList.remove('active');
+
+    // Scrollear hacia arriba
+    const catalogContainer = document.getElementById('catalog-section');
+    if (catalogContainer) catalogContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    // Limpiar sidebar y ejecutar búsqueda
+    document.querySelectorAll('.filter-option span').forEach(s => s.classList.remove('active'));
+    document.querySelector('input[name="col"][value=""]').checked = true;
+    document.querySelector('input[name="ori"][value="landscape"]').checked = true;
+    if(document.getElementById('searchInput')) document.getElementById('searchInput').value = tagWord;
+
+    // Llamar a la función que creamos en la Sección 5
+    if (typeof window.executeAPI === 'function') {
+      window.executeAPI(tagWord, true);
+    } else {
+      // Fallback si executeAPI no está en el scope global
+      console.warn("SYS.WARN // Redirigiendo búsqueda...");
+    }
+  };
+
   function attachModalLogic() {
     const triggers = document.querySelectorAll('.modal-trigger');
-    attachCursorHover(triggers);
+    if (typeof attachCursorHover === 'function') attachCursorHover(triggers);
 
     triggers.forEach(trigger => {
       trigger.addEventListener('click', () => {
@@ -520,17 +571,55 @@ document.addEventListener('DOMContentLoaded', () => {
         const product = artDatabase.find(p => p.id === productId);
 
         if (product && modal) {
-          // Poblamiento de Datos en Modal
+          // Poblamiento de Datos Base en Modal
           document.getElementById('modalTitle').textContent = product.title;
           document.getElementById('modalArtist').textContent = product.artist;
           document.getElementById('modalExhibitions').textContent = product.exhibitions;
           document.getElementById('modalDesc').textContent = product.desc;
-          document.getElementById('modalImage').innerHTML = `<img src="${product.image}" style="width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%) contrast(120%);">`;
+
+          // La imagen ahora usa object-fit: contain para no cortarse
+          document.getElementById('modalImage').innerHTML = `<img src="${product.image}" style="width: 100%; height: 100%; object-fit: contain; filter: grayscale(20%) contrast(120%);">`;
+
+          // --- INYECCIÓN DE NUEVOS DATOS TÁCTICOS ---
+
+          const dimEl = document.getElementById('modalDimensions');
+          if(dimEl) dimEl.textContent = product.dimensions || "DATOS CLASIFICADOS";
+
+          const likesEl = document.getElementById('modalLikes');
+          if(likesEl) likesEl.textContent = product.likes ? product.likes.toLocaleString() : "0";
+
+          // Muestra el código Hex y un cuadrito con el color real
+          const hexEl = document.getElementById('modalHex');
+          if(hexEl) {
+            hexEl.innerHTML = `
+                ${product.hexColor || "#000000"}
+                <span style="display:inline-block; width:15px; height:15px; background-color:${product.hexColor || "#000"}; border:1px solid #444;"></span>
+              `;
+          }
+
+          // Generador dinámico de Etiquetas (Tags) convertidas en botones
+          const tagsContainer = document.getElementById('modalTags');
+          if(tagsContainer) {
+            tagsContainer.innerHTML = '';
+            if(product.tags && product.tags.length > 0) {
+              product.tags.forEach(tag => {
+                // Reemplazamos espacios por guiones para la búsqueda visual
+                const cleanTag = tag.replace(/\s+/g, '-');
+                tagsContainer.innerHTML += `
+                    <button onclick="searchFromTag('${tag}')" style="border: 1px solid var(--primary); color: var(--primary); padding: 6px 12px; font-size: 0.75rem; font-family: var(--font-tech); text-transform: uppercase; background: rgba(212, 255, 0, 0.05); cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='var(--primary)'; this.style.color='#000';" onmouseout="this.style.background='rgba(212, 255, 0, 0.05)'; this.style.color='var(--primary)';">
+                      #${cleanTag}
+                    </button>`;
+              });
+            } else {
+              tagsContainer.innerHTML = '<span style="color: #666; font-size: 0.8rem;">[ SIN ETIQUETAS REGISTRADAS ]</span>';
+            }
+          }
 
           // Generación de estrellas en base al rating
           let starsHTML = '';
           for (let i = 1; i <= 5; i++) { starsHTML += i <= product.rating ? '★' : '☆'; }
-          document.getElementById('modalRating').textContent = starsHTML;
+          const ratingEl = document.getElementById('modalRating');
+          if(ratingEl) ratingEl.textContent = starsHTML;
 
           modal.classList.add('active');
         }

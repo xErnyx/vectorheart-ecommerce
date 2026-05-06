@@ -158,10 +158,21 @@
         <div class="modal-image" id="modalImage"></div>
       </div>
 
-      <!-- 3. Metadatos (Artista y Exposición) -->
+      <!-- 3. Metadatos Expandidos -->
       <div class="modal-data-vertical">
         <p class="modal-data"><span>[ ARTISTA ]</span> <strong id="modalArtist">...</strong></p>
         <p class="modal-data"><span>[ EXPOSICIÓN ]</span> <strong id="modalExhibitions">...</strong></p>
+        <p class="modal-data"><span>[ RESOLUCIÓN ]</span> <strong id="modalDimensions" style="color: #FFF;">...</strong></p>
+        <p class="modal-data" style="align-items: center;">
+          <span>[ FIRMA HEX ]</span>
+          <strong id="modalHex" style="display: flex; align-items: center; gap: 10px;">...</strong>
+        </p>
+        <p class="modal-data"><span>[ RED (LIKES) ]</span> <strong id="modalLikes" style="color: #FFF;">...</strong></p>
+      </div>
+
+      <!-- 3.5 Etiquetas (Tags) -->
+      <div class="modal-tags" id="modalTags" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 25px; border-bottom: 1px dashed #333; padding-bottom: 25px;">
+        <!-- Se inyectan con JS -->
       </div>
 
       <!-- 4. Estrellas / Rating -->
