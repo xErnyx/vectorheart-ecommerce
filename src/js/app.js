@@ -619,45 +619,76 @@ document.addEventListener('DOMContentLoaded', () => {
      ========================================================================== */
   const modal = document.getElementById('artModal');
   const closeModalBtn = document.getElementById('closeModalBtn');
-  // --- Lógica del Cubo de Datos Táctico de 6 Caras ---
+  // --- Motor del Mutador Geométrico 3D (6 Formas Aleatorias) ---
   const btnModo3D = document.getElementById('btnModo3D');
-  const modalImageContainer = document.getElementById('modalImageContainer'); // Padre contenedor
+  const modalImageContainer = document.getElementById('modalImageContainer');
   const tacticalCube = document.getElementById('tacticalCube');
-  const cubeFaces = document.querySelectorAll('.cube-face');
-  const modalImageBase = document.getElementById('modalImageBase'); // Imagen base
+  const modalImageBase = document.getElementById('modalImageBase');
 
-  // Variables de control de rotación (Giroscópica)
   let is3DModeActive = false;
 
-  if (btnModo3D && modalImageContainer && tacticalCube && cubeFaces) {
+  // Diccionario Táctico: [Número de caras, Ancho de cada panel en px]
+  const geometricForms = [
+    { faces: 3, width: 260 }, // 1. Tótem Triangular
+    { faces: 4, width: 260 }, // 2. Display Cuadrado
+    { faces: 5, width: 200 }, // 3. Prisma Pentagonal
+    { faces: 6, width: 180 }, // 4. Núcleo Hexagonal
+    { faces: 8, width: 140 }, // 5. Carrusel Octagonal
+    { faces: 12, width: 90 }  // 6. Cilindro Denso
+  ];
+
+  if (btnModo3D && modalImageContainer && tacticalCube && modalImageBase) {
     if (typeof attachCursorHover === 'function') attachCursorHover([btnModo3D]);
 
-    // Función para activar/desactivar el modo Cubo
     btnModo3D.addEventListener('click', () => {
       is3DModeActive = !is3DModeActive;
 
       if (is3DModeActive) {
-        // Protocolo: Obtener URL y aplicar a las 6 caras
         const currentImageUrl = modalImageBase.querySelector('img').src;
-        cubeFaces.forEach(face => { face.style.backgroundImage = `url(${currentImageUrl})`; });
+        tacticalCube.innerHTML = ''; // Limpiar figura anterior
 
-        // Activación visual (USAMOS CLASE EN EL PADRE)
+        // 1. Sorteamos una de las 6 figuras al azar
+        const randomShape = geometricForms[Math.floor(Math.random() * geometricForms.length)];
+
+        // 2. Matemática Geométrica (Cálculo del ángulo y la profundidad Z)
+        const angle = 360 / randomShape.faces;
+        const tz = Math.round((randomShape.width / 2) / Math.tan(Math.PI / randomShape.faces));
+
+        // Ajustamos el esqueleto principal a la figura ganadora
+        tacticalCube.style.width = `${randomShape.width}px`;
+        tacticalCube.style.height = '260px';
+
+        // 3. Forjamos e inyectamos los paneles de cristal
+        for (let i = 0; i < randomShape.faces; i++) {
+          const face = document.createElement('div');
+          face.className = 'cube-face';
+          face.style.width = `${randomShape.width}px`;
+          face.style.backgroundImage = `url(${currentImageUrl})`;
+
+          // Doblado perfecto según la trigonometría calculada
+          face.style.transform = `rotateY(${i * angle}deg) translateZ(${tz}px)`;
+          tacticalCube.appendChild(face);
+        }
+
+        // Encendido del HUD
         modalImageContainer.classList.add('is-3d-active');
         btnModo3D.style.background = 'var(--primary)';
         btnModo3D.style.color = '#000';
-        // Rotación inicial táctica
-        tacticalCube.style.transform = `perspective(1200px) rotateX(-25deg) rotateY(-35deg)`;
+        tacticalCube.style.transform = `perspective(1200px) rotateX(-15deg) rotateY(-25deg)`;
 
       } else {
-        // Desactivación visual
+        // Apagado del HUD
         modalImageContainer.classList.remove('is-3d-active');
         btnModo3D.style.background = 'rgba(10,10,10,0.8)';
         btnModo3D.style.color = 'var(--primary)';
-        tacticalCube.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg)`; // Reset suave
+        tacticalCube.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg)`;
+
+        // Limpiamos los cristales tras la animación para ahorrar memoria
+        setTimeout(() => tacticalCube.innerHTML = '', 400);
       }
     });
 
-    // Control Giroscópico (Seguimiento del Ratón)
+    // --- Control Giroscópico Reactivo ---
     modalImageContainer.addEventListener('mousemove', (e) => {
       if (!is3DModeActive) return;
 
@@ -665,11 +696,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
 
-      // Calculamos la rotación (lerp/suavizado táctico)
       const targetCubeY = ((e.clientX - centerX) / (rect.width / 2)) * 360;
       const targetCubeX = ((e.clientY - centerY) / (rect.height / 2)) * -360;
 
-      // Aplicamos el seguimiento
       tacticalCube.style.transform = `perspective(1200px) rotateX(${targetCubeX}deg) rotateY(${targetCubeY}deg)`;
     });
   }

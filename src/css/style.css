@@ -164,30 +164,20 @@ body, a, button, .close-menu, .lang-btn, .social-icon, img, input { cursor: none
 .modal-rating { color: var(--secondary); font-size: 1.8rem; letter-spacing: 3px; }
 .modal-desc-vertical { border-left: 2px solid var(--secondary); padding-left: 20px; }
 .modal-desc { line-height: 1.8; font-size: 1.05rem; color: #BBB; font-family: var(--font-tech); margin: 0; text-align: justify; }
-/* ================= REEMPLAZAR LÓGICA 3D AL FINAL DEL CSS ================= */
+/* ================= LÓGICA 3D MULTI-FORMA ================= */
 #modalImageContainer { perspective: 1200px; }
 .modal-image { width: 100%; height: 100%; transition: all 0.5s ease; }
 
-/* La Escena del Cubo ocupa todo el marco */
 .cube-scene { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
 
-/* Control de turnos: En 3D, la imagen plana NO desaparece, se vuelve un fondo holográfico */
 .is-3d-active .modal-image { opacity: 0.15; filter: blur(8px); transform: scale(0.95); pointer-events: none; }
 .is-3d-active .cube-scene { opacity: 1; pointer-events: all; }
 
-/* Prisma Ajustado (260px para no salirse del marco) */
-.tactical-cube { width: 260px; height: 260px; position: relative; transform-style: preserve-3d; transition: transform 0.1s linear; }
+/* Contenedor dinámico (JS ajustará su tamaño) */
+.tactical-cube { position: relative; transform-style: preserve-3d; transition: transform 0.1s linear; display: flex; justify-content: center; align-items: center; }
 
-/* Caras del Prisma */
-.cube-face { position: absolute; width: 260px; height: 260px; background-size: cover; background-position: center; border: 2px solid var(--primary); box-shadow: inset 0 0 50px rgba(0,0,0,0.9), 0 0 15px rgba(212,255,0,0.3); filter: contrast(110%); }
-
-/* Plegado 3D Matemático para 260px -> translateZ(130px) */
-.cube-face.front  { transform: rotateY(  0deg) translateZ(130px); }
-.cube-face.back   { transform: rotateY(180deg) translateZ(130px); }
-.cube-face.right  { transform: rotateY( 90deg) translateZ(130px); }
-.cube-face.left   { transform: rotateY(-90deg) translateZ(130px); }
-.cube-face.top    { transform: rotateX( 90deg) translateZ(130px); }
-.cube-face.bottom { transform: rotateX(-90deg) translateZ(130px); }
+/* Cara Base Universal */
+.cube-face { position: absolute; height: 260px; background-size: cover; background-position: center; border: 2px solid var(--primary); box-shadow: inset 0 0 50px rgba(0,0,0,0.9), 0 0 15px rgba(212,255,0,0.3); filter: contrast(110%); backface-visibility: visible; }
 
 /* ==========================================================================
    07. PANEL LATERAL DEL CARRITO
