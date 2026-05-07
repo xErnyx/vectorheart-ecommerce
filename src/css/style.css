@@ -23,8 +23,9 @@
   --font-tech: 'Space Mono', monospace;        /* HUD y Datos (Eq. Fraktion Mono) */
 }
 
+/* REEMPLAZAR AL FINAL DE LA SECCIÓN 01 EN STYLE.CSS */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { width: 100%; max-width: 100vw; overflow-x: hidden; }
+html, body { width: 100%; max-width: 100vw; overflow-x: clip; } /* FIX: 'clip' permite que el sidebar te siga */
 body { background-color: var(--bg); color: var(--text-light); font-family: var(--font-tech); padding-top: 40px; }
 
 /* ==========================================================================
