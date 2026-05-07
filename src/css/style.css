@@ -164,6 +164,31 @@ body, a, button, .close-menu, .lang-btn, .social-icon, img, input { cursor: none
 .modal-rating { color: var(--secondary); font-size: 1.8rem; letter-spacing: 3px; }
 .modal-desc-vertical { border-left: 2px solid var(--secondary); padding-left: 20px; }
 .modal-desc { line-height: 1.8; font-size: 1.05rem; color: #BBB; font-family: var(--font-tech); margin: 0; text-align: justify; }
+/* Preparación del entorno 3D */
+#modalImageContainer { perspective: 1200px; overflow: visible; }
+.modal-image { transform-style: preserve-3d; transition: transform 0.15s ease-out; position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; }
+.modal-image img { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2; }
+
+/* Caras del Prisma 3D (Invisibles por defecto) */
+.modal-image::before, .modal-image::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: all 0.4s ease; }
+
+/* EFECTO CUBO ACTIVO */
+.modal-image.is-3d img {
+  transform: translateZ(0px) scale(0.95); /* La imagen flota en el centro exacto */
+  filter: drop-shadow(0 0 30px rgba(0,0,0,0.9)) !important;
+}
+/* Cara Frontal (Cristal Neón) */
+.modal-image.is-3d::after {
+  opacity: 1; transform: translateZ(60px); z-index: 3;
+  border: 2px solid var(--primary);
+  box-shadow: inset 0 0 40px rgba(212, 255, 0, 0.1), 0 0 20px rgba(212, 255, 0, 0.2);
+}
+/* Cara Trasera (Fondo oscuro blindado) */
+.modal-image.is-3d::before {
+  opacity: 1; transform: translateZ(-60px); z-index: 1;
+  border: 1px dashed rgba(212, 255, 0, 0.4);
+  background: rgba(0, 0, 0, 0.7); /* Oscurece el fondo para dar profundidad */
+}
 
 /* ==========================================================================
    07. PANEL LATERAL DEL CARRITO

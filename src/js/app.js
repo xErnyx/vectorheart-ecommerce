@@ -632,6 +632,53 @@ document.addEventListener('DOMContentLoaded', () => {
      ========================================================================== */
   const modal = document.getElementById('artModal');
   const closeModalBtn = document.getElementById('closeModalBtn');
+  const btnModo3D = document.getElementById('btnModo3D');
+  const modalImageContainer = document.getElementById('modalImageContainer');
+  const modalImageEl = document.getElementById('modalImage');
+  let is3DModeActive = false;
+
+  if (btnModo3D && modalImageContainer && modalImageEl) {
+    if (typeof attachCursorHover === 'function') attachCursorHover([btnModo3D]);
+
+    // Activar/Desactivar el Prisma 3D
+    btnModo3D.addEventListener('click', () => {
+      is3DModeActive = !is3DModeActive;
+      if (is3DModeActive) {
+        btnModo3D.style.background = 'var(--primary)';
+        btnModo3D.style.color = '#000';
+        modalImageEl.classList.add('is-3d');
+      } else {
+        btnModo3D.style.background = 'rgba(10,10,10,0.8)';
+        btnModo3D.style.color = 'var(--primary)';
+        modalImageEl.classList.remove('is-3d');
+        modalImageEl.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg)`;
+      }
+    });
+
+    // Movimiento giroscópico del cubo
+    modalImageContainer.addEventListener('mousemove', (e) => {
+      if (!is3DModeActive) return;
+
+      const rect = modalImageContainer.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      // Ampliamos a 20 grados para ver bien la profundidad del cubo
+      const rotateX = ((y - centerY) / centerY) * -20;
+      const rotateY = ((x - centerX) / centerX) * 20;
+
+      modalImageEl.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    // Resetear al salir
+    modalImageContainer.addEventListener('mouseleave', () => {
+      if (is3DModeActive) {
+        modalImageEl.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg)`;
+      }
+    });
+  }
 
   // Función para cerrar el modal y buscar un tag (Exportada al objeto window)
   window.searchFromTag = function(tagWord) {
@@ -725,7 +772,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Cierre manual del modal
   if (closeModalBtn && modal) {
-    closeModalBtn.addEventListener('click', () => modal.classList.remove('active'));
+    closeModalBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+      // Apagamos el 3D al cerrar el modal por seguridad
+      if (is3DModeActive) btnModo3D.click();
+    });
   }
 
 
@@ -750,43 +801,30 @@ document.addEventListener('DOMContentLoaded', () => {
      09. MÓDULO EXPERIMENTAL 3D (HOLOGRAFÍA TILT)
      ========================================================================== */
   const initTiltEffect = () => {
-    // Seleccionamos las tarjetas que tendrán el efecto 3D
     const cards3D = document.querySelectorAll('.product-card, .service-card');
-
     cards3D.forEach(card => {
-      // Le agregamos la clase que preserva el 3D en CSS
       card.classList.add('tilt-3d-active');
-
       card.addEventListener('mousemove', (e) => {
-        // Obtenemos las dimensiones y posición de la tarjeta
         const rect = card.getBoundingClientRect();
-
-        // Calculamos la posición del mouse relativa al centro de la tarjeta
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
-
-        // Calculamos los grados de rotación (máximo 12 grados para no marear)
-        const rotateX = ((y - centerY) / centerY) * -12;
-        const rotateY = ((x - centerX) / centerX) * 12;
-
-        // Aplicamos la transformación 3D en tiempo real
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-        card.style.transition = 'none'; // Quitamos la transición para que siga el mouse al instante
+        // FIX: Suavizado táctico (lerp) y menos rotación (máx 6 grados)
+        const tiltX = (e.clientY - rect.top - centerY) / centerY;
+        const tiltY = (e.clientX - rect.left - centerX) / centerX;
+        const rotateX = tiltX * -6; // Máximo 6 grados para no marear
+        const rotateY = tiltY * 6;
+        // Aplicamos la transformación suavizada
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`;
+        card.style.transition = 'transform 0.1s linear'; // Suavizado en tiempo real
         card.style.zIndex = '50';
       });
-
-      // Cuando el mouse sale, la tarjeta vuelve a su estado plano con una transición suave
       card.addEventListener('mouseleave', () => {
-        card.style.transition = 'transform 0.5s ease-out';
+        card.style.transition = 'transform 0.4s ease-out';
         card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
         card.style.zIndex = '1';
       });
     });
   };
-
-  // Como tu catálogo carga desde una API, damos 2 segundos para asegurar que las tarjetas existan
   setTimeout(initTiltEffect, 2000);
 
 });
