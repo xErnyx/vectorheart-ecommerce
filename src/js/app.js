@@ -531,28 +531,15 @@ document.addEventListener('DOMContentLoaded', () => {
       archiveItems.forEach(product => {
         const isNew = product.status === 'NUEVO' ? '<span style="color:var(--dark); font-family:var(--font-tech); font-weight:bold; font-size: 0.9rem; position:absolute; top:10px; left:10px; background:var(--primary); padding:5px 10px; z-index:20;">NUEVO</span>' : '';
 
-        // ESTRUCTURA 3D TIPO ESTUCHE INYECTADA
+        // ESTRUCTURA PLANA PURGADA DE CÓDIGO FANTASMA
         catalogGrid.innerHTML += `
         <div class="product-card">
             <div class="card-header"><span class="serial">${product.id}</span><span class="status-dot"></span></div>
 
-            <div class="flipper-container modal-trigger" data-id="${product.id}" data-target="true">
-              <div class="card-flipper">
-
-                <div class="card-front">
-                    <img src="${product.image}" alt="${product.title}" class="real-art-img">
-                    ${isNew}
-                    <div class="scan-overlay"><div class="scan-text">INSPECCIONAR</div></div>
-                </div>
-
-                <div class="card-back">
-                  <svg viewBox="0 0 24 24" class="restricted-icon" width="40" height="40" fill="var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                  <p class="restricted-status">// ACCESO_CONCEDIDO</p>
-                  <div class="tactical-barcode"></div>
-                  <p class="data-stream">MÓDULO: ${product.id}<br>FIRMA HEX: ${product.hexColor}</p>
-                </div>
-
-              </div>
+            <div class="product-image modal-trigger" data-id="${product.id}" data-target="true">
+                <img src="${product.image}" alt="${product.title}" class="real-art-img">
+                ${isNew}
+                <div class="scan-overlay"><div class="scan-text">INSPECCIONAR</div></div>
             </div>
 
             <div class="product-info">
@@ -805,35 +792,5 @@ document.addEventListener('DOMContentLoaded', () => {
      08. FINALIZACIÓN Y VERIFICACIÓN POST-CARGA
      ========================================================================== */
   updateCartUI(); // Verificación redundante por seguridad de renderizado
-
-  /* ==========================================================================
-     09. MÓDULO EXPERIMENTAL 3D (HOLOGRAFÍA TILT)
-     ========================================================================== */
-  const initTiltEffect = () => {
-    const cards3D = document.querySelectorAll('.product-card, .service-card');
-    cards3D.forEach(card => {
-      card.classList.add('tilt-3d-active');
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        // FIX: Suavizado táctico (lerp) y menos rotación (máx 6 grados)
-        const tiltX = (e.clientY - rect.top - centerY) / centerY;
-        const tiltY = (e.clientX - rect.left - centerX) / centerX;
-        const rotateX = tiltX * -6; // Máximo 6 grados para no marear
-        const rotateY = tiltY * 6;
-        // Aplicamos la transformación suavizada
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.01, 1.01, 1.01)`;
-        card.style.transition = 'transform 0.1s linear'; // Suavizado en tiempo real
-        card.style.zIndex = '50';
-      });
-      card.addEventListener('mouseleave', () => {
-        card.style.transition = 'transform 0.4s ease-out';
-        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-        card.style.zIndex = '1';
-      });
-    });
-  };
-  setTimeout(initTiltEffect, 2000);
 
 });
