@@ -165,8 +165,20 @@
           </svg>
         </button>
       </div>
-      <div class="modal-image-vertical" id="modalImageContainer">
-        <div class="modal-image" id="modalImage"></div>
+      <div class="modal-image-vertical" id="modalImageContainer" style="overflow: visible; display: flex; justify-content: center; align-items: center; position: relative;">
+
+        <div class="modal-image" id="modalImageBase"></div>
+
+        <div class="cube-scene" id="cubeScene">
+          <div class="tactical-cube" id="tacticalCube">
+            <div class="cube-face front"></div>
+            <div class="cube-face back"></div>
+            <div class="cube-face left"></div>
+            <div class="cube-face right"></div>
+            <div class="cube-face top"></div>
+            <div class="cube-face bottom"></div>
+          </div>
+        </div>
       </div>
 
       <!-- 3. Metadatos Expandidos -->

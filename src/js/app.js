@@ -632,51 +632,58 @@ document.addEventListener('DOMContentLoaded', () => {
      ========================================================================== */
   const modal = document.getElementById('artModal');
   const closeModalBtn = document.getElementById('closeModalBtn');
+  // --- Lógica del Cubo de Datos Táctico de 6 Caras ---
   const btnModo3D = document.getElementById('btnModo3D');
-  const modalImageContainer = document.getElementById('modalImageContainer');
-  const modalImageEl = document.getElementById('modalImage');
+  const modalImageContainer = document.getElementById('modalImageContainer'); // Padre contenedor
+  const tacticalCube = document.getElementById('tacticalCube');
+  const cubeFaces = document.querySelectorAll('.cube-face');
+  const modalImageBase = document.getElementById('modalImageBase'); // Imagen base
+
+  // Variables de control de rotación (Giroscópica)
   let is3DModeActive = false;
 
-  if (btnModo3D && modalImageContainer && modalImageEl) {
+  if (btnModo3D && modalImageContainer && tacticalCube && cubeFaces) {
     if (typeof attachCursorHover === 'function') attachCursorHover([btnModo3D]);
 
-    // Activar/Desactivar el Prisma 3D
+    // Función para activar/desactivar el modo Cubo
     btnModo3D.addEventListener('click', () => {
       is3DModeActive = !is3DModeActive;
+
       if (is3DModeActive) {
+        // Protocolo: Obtener URL y aplicar a las 6 caras
+        const currentImageUrl = modalImageBase.querySelector('img').src;
+        cubeFaces.forEach(face => { face.style.backgroundImage = `url(${currentImageUrl})`; });
+
+        // Activación visual (USAMOS CLASE EN EL PADRE)
+        modalImageContainer.classList.add('is-3d-active');
         btnModo3D.style.background = 'var(--primary)';
         btnModo3D.style.color = '#000';
-        modalImageEl.classList.add('is-3d');
+        // Rotación inicial táctica
+        tacticalCube.style.transform = `perspective(1200px) rotateX(-25deg) rotateY(-35deg)`;
+
       } else {
+        // Desactivación visual
+        modalImageContainer.classList.remove('is-3d-active');
         btnModo3D.style.background = 'rgba(10,10,10,0.8)';
         btnModo3D.style.color = 'var(--primary)';
-        modalImageEl.classList.remove('is-3d');
-        modalImageEl.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg)`;
+        tacticalCube.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg)`; // Reset suave
       }
     });
 
-    // Movimiento giroscópico del cubo
+    // Control Giroscópico (Seguimiento del Ratón)
     modalImageContainer.addEventListener('mousemove', (e) => {
       if (!is3DModeActive) return;
 
       const rect = modalImageContainer.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
 
-      // Ampliamos a 20 grados para ver bien la profundidad del cubo
-      const rotateX = ((y - centerY) / centerY) * -20;
-      const rotateY = ((x - centerX) / centerX) * 20;
+      // Calculamos la rotación (lerp/suavizado táctico)
+      const targetCubeY = ((e.clientX - centerX) / (rect.width / 2)) * 360;
+      const targetCubeX = ((e.clientY - centerY) / (rect.height / 2)) * -360;
 
-      modalImageEl.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-
-    // Resetear al salir
-    modalImageContainer.addEventListener('mouseleave', () => {
-      if (is3DModeActive) {
-        modalImageEl.style.transform = `perspective(1200px) rotateX(0deg) rotateY(0deg)`;
-      }
+      // Aplicamos el seguimiento
+      tacticalCube.style.transform = `perspective(1200px) rotateX(${targetCubeX}deg) rotateY(${targetCubeY}deg)`;
     });
   }
 
@@ -718,10 +725,13 @@ document.addEventListener('DOMContentLoaded', () => {
           document.getElementById('modalExhibitions').textContent = product.exhibitions;
           document.getElementById('modalDesc').textContent = product.desc;
 
-          // La imagen ahora usa object-fit: contain para no cortarse
-          document.getElementById('modalImage').innerHTML = `<img src="${product.image}" style="width: 100%; height: 100%; object-fit: contain; filter: grayscale(20%) contrast(120%);">`;
+          // FIX TÁCTICO: Ahora inyectamos la imagen en 'modalImageBase'
+          const imageBase = document.getElementById('modalImageBase');
+          if (imageBase) {
+            imageBase.innerHTML = `<img src="${product.image}" style="width: 100%; height: 100%; object-fit: contain; filter: grayscale(20%) contrast(120%);">`;
+          }
 
-          // --- INYECCIÓN DE NUEVOS DATOS TÁCTICOS ---
+          // --- INYECCIÓN DE DATOS TÁCTICOS ---
           const dimEl = document.getElementById('modalDimensions');
           if (dimEl) dimEl.textContent = product.dimensions || "DATOS CLASIFICADOS";
 
@@ -737,13 +747,12 @@ document.addEventListener('DOMContentLoaded', () => {
               `;
           }
 
-          // Generador dinámico de Etiquetas (Tags) convertidas en botones
+          // Generador dinámico de Etiquetas (Tags)
           const tagsContainer = document.getElementById('modalTags');
           if (tagsContainer) {
             tagsContainer.innerHTML = '';
             if (product.tags && product.tags.length > 0) {
               product.tags.forEach(tag => {
-                // Reemplazamos espacios por guiones para la búsqueda visual
                 const cleanTag = tag.replace(/\s+/g, '-');
                 tagsContainer.innerHTML += `
                     <button onclick="searchFromTag('${tag}')" style="border: 1px solid var(--primary); color: var(--primary); padding: 6px 12px; font-size: 0.75rem; font-family: var(--font-tech); text-transform: uppercase; background: rgba(212, 255, 0, 0.05); cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='var(--primary)'; this.style.color='#000';" onmouseout="this.style.background='rgba(212, 255, 0, 0.05)'; this.style.color='var(--primary)';">
@@ -760,10 +769,10 @@ document.addEventListener('DOMContentLoaded', () => {
           for (let i = 1; i <= 5; i++) {
             starsHTML += i <= product.rating ? '★' : '☆';
           }
-
           const ratingEl = document.getElementById('modalRating');
           if (ratingEl) ratingEl.textContent = starsHTML;
 
+          // Desplegar Modal
           modal.classList.add('active');
         }
       });
