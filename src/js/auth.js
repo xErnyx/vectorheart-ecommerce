@@ -8,7 +8,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
   /* ==========================================================================
-     1. SISTEMA DE NOTIFICACIONES Y ERRORES VISUALES (UI)
+     01. SISTEMA DE NOTIFICACIONES Y ERRORES VISUALES (UI)
      ========================================================================== */
 
   // Función para inyectar errores visuales estilo "glitch" en el DOM
@@ -16,8 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
     inputElement.classList.add('input-error');
     const errorSpan = document.createElement('span');
     errorSpan.className = 'error-text';
+
     // Se inyecta un icono SVG táctico de advertencia junto al mensaje
     errorSpan.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg> [SYS.ERR] ${errorMessage}`;
+
     inputElement.parentNode.insertBefore(errorSpan, inputElement.nextSibling);
   };
 
@@ -29,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ==========================================================================
-     2. ALGORITMOS DE VALIDACIÓN Y DICCIONARIOS DE DATOS
+     02. ALGORITMOS DE VALIDACIÓN Y DICCIONARIOS DE DATOS
      ========================================================================== */
 
   // --- Algoritmo Matemático: Validación de Cédula Ecuatoriana (Módulo 10) ---
@@ -73,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ==========================================================================
-     3. MÓDULO DE AUTENTICACIÓN (LOGIN DE USUARIO)
+     03. MÓDULO DE AUTENTICACIÓN (LOGIN DE USUARIO)
      ========================================================================== */
   const formLogin = document.getElementById('formLogin');
 
@@ -96,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showError(emailInput, "FORMATO INVÁLIDO.");
         isValid = false;
       }
+
       if (!claveInput.value.trim()) {
         showError(claveInput, "CLAVE REQUERIDA.");
         isValid = false;
@@ -109,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Animación de éxito
         submitBtn.style.background = "#FFF";
         submitBtn.textContent = "VERIFICANDO CREDENCIALES...";
+
         setTimeout(() => {
           submitBtn.style.background = "var(--primary)";
           submitBtn.textContent = "ACCESO CONCEDIDO";
@@ -119,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.style.background = "#FF003C";
         submitBtn.style.color = "#FFF";
         submitBtn.textContent = "[ ACCESO DENEGADO ]";
+
         setTimeout(() => {
           submitBtn.style.background = "var(--primary)";
           submitBtn.style.color = "var(--dark)";
@@ -130,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   /* ==========================================================================
-     4. MÓDULO DE ALTA DE OPERADORES (REGISTRO AVANZADO)
+     04. MÓDULO DE ALTA DE OPERADORES (REGISTRO AVANZADO)
      ========================================================================== */
   const formRegistro = document.getElementById('formRegistro');
   const cedulaInput = document.getElementById('cedula');
@@ -138,8 +143,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (formRegistro) {
 
-    // --- 4.1 Detector en Tiempo Real de Origen (Cédula) ---
-    if(cedulaInput) {
+    // --- 04.1 Detector en Tiempo Real de Origen (Cédula) ---
+    if (cedulaInput) {
       cedulaInput.addEventListener('input', function() {
         // Filtramos para aceptar solo números
         this.value = this.value.replace(/[^0-9]/g, '');
@@ -160,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // --- 4.2 Procesamiento y Validación del Formulario de Registro ---
+    // --- 04.2 Procesamiento y Validación del Formulario de Registro ---
     formRegistro.addEventListener('submit', (e) => {
       e.preventDefault();
       clearErrors(formRegistro);
@@ -200,6 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showError(claveInput, "CLAVE REQUERIDA.");
         isValid = false;
       }
+
       if (!claveConfirmInput.value.trim()) {
         showError(claveConfirmInput, "DEBE VERIFICAR CLAVE.");
         isValid = false;
@@ -217,19 +223,20 @@ document.addEventListener('DOMContentLoaded', () => {
         isValid = false;
       }
 
-      // --- 4.3 Cálculos Internos y Almacenamiento Persistente ---
+      // --- 04.3 Cálculos Internos y Almacenamiento Persistente ---
       if (isValid) {
-        const submitBtn = formRegistro.querySelector('.btn-submit');
-        const originalBtnHTML = submitBtn.innerHTML;
-
         // Función empaquetadora (se ejecuta tras procesar la imagen)
         const saveAndRedirect = (fotoData) => {
+
           // Cálculo automático de edad (Tiempo de servicio)
           const [birthYear, birthMonth] = fechaInput.value.split('-');
           const today = new Date();
           let edadCalculada = today.getFullYear() - parseInt(birthYear);
+
           // Ajuste si aún no ha cumplido años en el mes actual
-          if (today.getMonth() + 1 < parseInt(birthMonth)) { edadCalculada--; }
+          if (today.getMonth() + 1 < parseInt(birthMonth)) {
+            edadCalculada--;
+          }
 
           const origenProvincia = provinciasEcuador[cedulaInput.value.substring(0, 2)];
 
