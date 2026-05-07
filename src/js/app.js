@@ -530,14 +530,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
       archiveItems.forEach(product => {
         const isNew = product.status === 'NUEVO' ? '<span style="color:var(--dark); font-family:var(--font-tech); font-weight:bold; font-size: 0.9rem; position:absolute; top:10px; left:10px; background:var(--primary); padding:5px 10px; z-index:20;">NUEVO</span>' : '';
+
+        // ESTRUCTURA 3D TIPO ESTUCHE INYECTADA
         catalogGrid.innerHTML += `
         <div class="product-card">
             <div class="card-header"><span class="serial">${product.id}</span><span class="status-dot"></span></div>
-            <div class="product-image modal-trigger" data-id="${product.id}" data-target="true">
-                <img src="${product.image}" alt="${product.title}" class="real-art-img">
-                ${isNew}
-                <div class="scan-overlay"><div class="scan-text">INSPECCIONAR</div></div>
+
+            <div class="flipper-container modal-trigger" data-id="${product.id}" data-target="true">
+              <div class="card-flipper">
+
+                <div class="card-front">
+                    <img src="${product.image}" alt="${product.title}" class="real-art-img">
+                    ${isNew}
+                    <div class="scan-overlay"><div class="scan-text">INSPECCIONAR</div></div>
+                </div>
+
+                <div class="card-back">
+                  <svg viewBox="0 0 24 24" class="restricted-icon" width="40" height="40" fill="var(--primary)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                  <p class="restricted-status">// ACCESO_CONCEDIDO</p>
+                  <div class="tactical-barcode"></div>
+                  <p class="data-stream">MÓDULO: ${product.id}<br>FIRMA HEX: ${product.hexColor}</p>
+                </div>
+
+              </div>
             </div>
+
             <div class="product-info">
                 <h3 title="${product.title}">${product.title}</h3><p class="price">$${product.price.toFixed(2)}</p>
                 <button class="add-btn" data-id="${product.id}" data-target="true">AÑADIR AL SISTEMA</button>
@@ -728,5 +745,48 @@ document.addEventListener('DOMContentLoaded', () => {
      08. FINALIZACIÓN Y VERIFICACIÓN POST-CARGA
      ========================================================================== */
   updateCartUI(); // Verificación redundante por seguridad de renderizado
+
+  /* ==========================================================================
+     09. MÓDULO EXPERIMENTAL 3D (HOLOGRAFÍA TILT)
+     ========================================================================== */
+  const initTiltEffect = () => {
+    // Seleccionamos las tarjetas que tendrán el efecto 3D
+    const cards3D = document.querySelectorAll('.product-card, .service-card');
+
+    cards3D.forEach(card => {
+      // Le agregamos la clase que preserva el 3D en CSS
+      card.classList.add('tilt-3d-active');
+
+      card.addEventListener('mousemove', (e) => {
+        // Obtenemos las dimensiones y posición de la tarjeta
+        const rect = card.getBoundingClientRect();
+
+        // Calculamos la posición del mouse relativa al centro de la tarjeta
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        // Calculamos los grados de rotación (máximo 12 grados para no marear)
+        const rotateX = ((y - centerY) / centerY) * -12;
+        const rotateY = ((x - centerX) / centerX) * 12;
+
+        // Aplicamos la transformación 3D en tiempo real
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        card.style.transition = 'none'; // Quitamos la transición para que siga el mouse al instante
+        card.style.zIndex = '50';
+      });
+
+      // Cuando el mouse sale, la tarjeta vuelve a su estado plano con una transición suave
+      card.addEventListener('mouseleave', () => {
+        card.style.transition = 'transform 0.5s ease-out';
+        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        card.style.zIndex = '1';
+      });
+    });
+  };
+
+  // Como tu catálogo carga desde una API, damos 2 segundos para asegurar que las tarjetas existan
+  setTimeout(initTiltEffect, 2000);
 
 });
