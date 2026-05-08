@@ -731,6 +731,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     triggers.forEach(trigger => {
       trigger.addEventListener('click', () => {
+
+        // FIX TÁCTICO: Apagado forzado del 3D antes de cargar una nueva obra
+        // Esto limpia la memoria holográfica y evita el cruce de imágenes
+        if (typeof is3DModeActive !== 'undefined' && is3DModeActive && typeof btnModo3D !== 'undefined' && btnModo3D) {
+          btnModo3D.click();
+        }
+
         const productId = trigger.getAttribute('data-id');
         const product = artDatabase.find(p => p.id === productId);
 
@@ -758,12 +765,12 @@ document.addEventListener('DOMContentLoaded', () => {
           const hexEl = document.getElementById('modalHex');
           if (hexEl) {
             hexEl.innerHTML = `
-                ${product.hexColor || "#000000"}
-                <span style="display:inline-block; width:15px; height:15px; background-color:${product.hexColor || "#000"}; border:1px solid #444;"></span>
-              `;
+              ${product.hexColor || "#000000"}
+              <span style="display:inline-block; width:15px; height:15px; background-color:${product.hexColor || "#000"}; border:1px solid #444;"></span>
+            `;
           }
 
-          // Generador dinámico de Etiquetas (Tags)
+          // Generador dinámico de Etiquetas (Tags) INTACTO
           const tagsContainer = document.getElementById('modalTags');
           if (tagsContainer) {
             tagsContainer.innerHTML = '';
@@ -771,9 +778,9 @@ document.addEventListener('DOMContentLoaded', () => {
               product.tags.forEach(tag => {
                 const cleanTag = tag.replace(/\s+/g, '-');
                 tagsContainer.innerHTML += `
-                    <button onclick="searchFromTag('${tag}')" style="border: 1px solid var(--primary); color: var(--primary); padding: 6px 12px; font-size: 0.75rem; font-family: var(--font-tech); text-transform: uppercase; background: rgba(212, 255, 0, 0.05); cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='var(--primary)'; this.style.color='#000';" onmouseout="this.style.background='rgba(212, 255, 0, 0.05)'; this.style.color='var(--primary)';">
-                      #${cleanTag}
-                    </button>`;
+                  <button onclick="searchFromTag('${tag}')" style="border: 1px solid var(--primary); color: var(--primary); padding: 6px 12px; font-size: 0.75rem; font-family: var(--font-tech); text-transform: uppercase; background: rgba(212, 255, 0, 0.05); cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='var(--primary)'; this.style.color='#000';" onmouseout="this.style.background='rgba(212, 255, 0, 0.05)'; this.style.color='var(--primary)';">
+                    #${cleanTag}
+                  </button>`;
               });
             } else {
               tagsContainer.innerHTML = '<span style="color: #666; font-size: 0.8rem;">[ SIN ETIQUETAS REGISTRADAS ]</span>';
@@ -812,7 +819,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape') {
       if (sideMenu && sideMenu.classList.contains('active')) sideMenu.classList.remove('active');
       if (cartPanel && cartPanel.classList.contains('active')) cartPanel.classList.remove('active');
-      if (modal && modal.classList.contains('active')) modal.classList.remove('active');
+      if (modal && modal.classList.contains('active')) {
+        modal.classList.remove('active');
+        // FIX TÁCTICO: Apagar el motor 3D si el usuario escapa con el teclado
+        if (is3DModeActive && btnModo3D) {
+          btnModo3D.click();
+        }
+      }
     }
   });
 
