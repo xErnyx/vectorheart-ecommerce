@@ -46,7 +46,7 @@
     .btn-guest-outline {
       background-color: transparent;
       color: #6600FF;
-      border: 1px dashed #6600FF;
+      border: 1px solid #6600FF; /* <-- Aquí estaba el dashed */
       padding: 15px;
       font-family: var(--font-tech);
       font-size: 0.85rem;
@@ -60,7 +60,7 @@
       justify-content: center;
       gap: 10px;
       width: 100%;
-      white-space: nowrap; /* FUERZA UNA SOLA LÍNEA */
+      white-space: nowrap;
     }
 
     .btn-guest-outline:hover {

@@ -20,7 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Se inyecta un icono SVG táctico de advertencia junto al mensaje
     errorSpan.innerHTML = `<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg> [SYS.ERR] ${errorMessage}`;
 
-    inputElement.parentNode.insertBefore(errorSpan, inputElement.nextSibling);
+    // FIX TÁCTICO: Si el input tiene el botón del ojo (password-wrapper), sacamos el error afuera de la caja
+    if (inputElement.parentElement.classList.contains('password-wrapper')) {
+      inputElement.parentElement.parentNode.insertBefore(errorSpan, inputElement.parentElement.nextSibling);
+    } else {
+      // Comportamiento normal para el resto de inputs
+      inputElement.parentNode.insertBefore(errorSpan, inputElement.nextSibling);
+    }
   };
 
   // Función para limpiar la interfaz de errores antes de un nuevo intento
@@ -102,6 +108,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Expresión Regular (RegEx) para Validar Correo Electrónico ---
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // --- Expresión Regular para Contraseña Fuerte ---
+  const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d@$!%*?&_.-]{8,}$/;
 
 
   /* ==========================================================================
@@ -230,9 +239,12 @@ document.addEventListener('DOMContentLoaded', () => {
         isValid = false;
       }
 
-      // Validación de contraseñas cruzadas (Confirmación)
+      // Validación de contraseñas cruzadas y seguridad táctica
       if (!claveInput.value.trim()) {
         showError(claveInput, "CLAVE REQUERIDA.");
+        isValid = false;
+      } else if (!passwordRegex.test(claveInput.value.trim())) {
+        showError(claveInput, "CLAVE DÉBIL: Mín. 8 caracteres, 1 mayúscula, 1 número.");
         isValid = false;
       }
 
