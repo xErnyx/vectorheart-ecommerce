@@ -253,6 +253,69 @@ document.addEventListener('DOMContentLoaded', () => {
   // Iniciamos la interfaz del carrito ahora que la data está limpia
   updateCartUI();
 
+  /* ==========================================================================
+     04.5 GESTIÓN GLOBAL DE FAVORITOS (ARCHIVOS CLASIFICADOS)
+     ========================================================================== */
+  function updateFavUI() {
+    let favorites = JSON.parse(localStorage.getItem('vh_fav_items')) || [];
+
+    // Actualizar el número rojo en el Header
+    const favBadge = document.getElementById('favCountBadge');
+    if (favBadge) favBadge.textContent = favorites.length;
+
+    const favItemsContainer = document.getElementById('favItemsContainer');
+    if (!favItemsContainer) return;
+
+    favItemsContainer.innerHTML = '';
+
+    if (favorites.length === 0) {
+      favItemsContainer.innerHTML = '<p style="color:#AAA; font-family:var(--font-tech); margin-top:20px; text-transform:uppercase; letter-spacing: 1px;">SISTEMA VACÍO</p>';
+      return;
+    }
+
+    // Pintar tarjetas clasificadas
+    favorites.forEach(product => {
+      favItemsContainer.innerHTML += `
+          <div class="cart-item">
+              <img src="${product.image}" alt="${product.title}">
+              <div class="cart-item-info">
+                  <h4 style="color: #FF003C;">${product.title}</h4>
+                  <p style="font-family: var(--font-tech); font-size: 0.8rem; color: #888;">SERIAL: ${product.id}</p>
+              </div>
+              <button class="remove-fav-btn" data-id="${product.id}" style="background:none; border:none; color:#666; font-family:var(--font-tech); font-size:0.75rem; text-decoration:underline; cursor:pointer;">Remover</button>
+          </div>
+      `;
+    });
+
+    // Lógica para remover un favorito individual desde el panel
+    document.querySelectorAll('.remove-fav-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        favorites = favorites.filter(item => item.id !== id);
+        localStorage.setItem('vh_fav_items', JSON.stringify(favorites));
+        updateFavUI();
+
+        // Si la tarjeta está visible en la página actual, apagar su corazón
+        const cardBtn = document.querySelector(`.fav-card-btn[data-id="${id}"]`);
+        if (cardBtn) cardBtn.classList.remove('is-fav');
+      });
+    });
+  }
+
+  // Lógica global para el botón "Purgar Favoritos"
+  const btnVaciarFavsGlobal = document.getElementById('btn-vaciar-favs');
+  if (btnVaciarFavsGlobal) {
+    if (typeof attachCursorHover === 'function') attachCursorHover([btnVaciarFavsGlobal]);
+    btnVaciarFavsGlobal.addEventListener('click', () => {
+      localStorage.setItem('vh_fav_items', JSON.stringify([]));
+      updateFavUI();
+      document.querySelectorAll('.fav-card-btn').forEach(b => b.classList.remove('is-fav'));
+    });
+  }
+
+  // Arranque forzado al cargar CUALQUIER página
+  updateFavUI();
+
 
   /* ==========================================================================
      05. MOTOR DE CONEXIÓN API Y SIDEBAR AVANZADO (UNSPLASH)
@@ -615,63 +678,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    function updateFavUI() {
-      let favorites = JSON.parse(localStorage.getItem('vh_fav_items')) || [];
-
-      // --- FIX TÁCTICO: Actualizar el contador numérico rojo en la barra superior ---
-      const favBadge = document.getElementById('favCountBadge');
-      if (favBadge) {
-        favBadge.textContent = favorites.length;
-      }
-      // -----------------------------------------------------------------------------
-
-      const favItemsContainer = document.getElementById('favItemsContainer');
-      if (!favItemsContainer) return;
-
-      favItemsContainer.innerHTML = '';
-
-      if (favorites.length === 0) {
-        favItemsContainer.innerHTML = '<p style="color:#AAA; font-family:var(--font-tech); margin-top:20px; text-transform:uppercase; letter-spacing: 1px;">SISTEMA VACÍO</p>';
-        return;
-      }
-
-      favorites.forEach(product => {
-        favItemsContainer.innerHTML += `
-            <div class="cart-item">
-                <img src="${product.image}" alt="${product.title}">
-                <div class="cart-item-info">
-                    <h4 style="color: #FF003C;">${product.title}</h4>
-                    <p style="font-family: var(--font-tech); font-size: 0.8rem; color: #888;">SERIAL: ${product.id}</p>
-                </div>
-                <button class="remove-fav-btn" data-id="${product.id}" style="background:none; border:none; color:#666; font-family:var(--font-tech); font-size:0.75rem; text-decoration:underline; cursor:pointer;">Remover</button>
-            </div>
-        `;
-      });
-
-      document.querySelectorAll('.remove-fav-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-id');
-          favorites = favorites.filter(item => item.id !== id);
-          localStorage.setItem('vh_fav_items', JSON.stringify(favorites));
-          updateFavUI();
-
-          const cardBtn = document.querySelector(`.fav-card-btn[data-id="${id}"]`);
-          if (cardBtn) cardBtn.classList.remove('is-fav');
-        });
-      });
-    }
-
-    // Purgar sistema Favoritos
-    const btnVaciarFavs = document.getElementById('btn-vaciar-favs');
-    if (btnVaciarFavs) {
-      if (typeof attachCursorHover === 'function') attachCursorHover([btnVaciarFavs]);
-      btnVaciarFavs.addEventListener('click', () => {
-        localStorage.setItem('vh_fav_items', JSON.stringify([]));
-        updateFavUI();
-        document.querySelectorAll('.fav-card-btn').forEach(b => b.classList.remove('is-fav'));
-      });
-    }
-
     function initHeroCarousel() {
       const carouselContainer = document.getElementById('heroCarousel');
       if (!carouselContainer || artDatabase.length === 0) return;
@@ -922,5 +928,4 @@ document.addEventListener('DOMContentLoaded', () => {
      08. FINALIZACIÓN Y VERIFICACIÓN POST-CARGA
      ========================================================================== */
   updateCartUI();
-  if (typeof updateFavUI === 'function') updateFavUI(); // Arrancar motor de favoritos
 });
