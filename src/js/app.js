@@ -93,21 +93,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // --- 02.2 Despliegue del Panel de Base de Datos (Carrito) ---
+  // --- 02.2 y 02.3 Despliegue de Paneles Laterales (Carrito y Favoritos) ---
+  const favPanel = document.getElementById('favPanel');
+  const closeFavBtn = document.getElementById('closeFavBtn');
+
   if (cartLink && cartPanel && closeCartBtn) {
     cartLink.addEventListener('click', (e) => {
       e.preventDefault();
       cartPanel.classList.add('active');
+      if (favPanel) favPanel.classList.remove('active'); // Apaga Favoritos
     });
     closeCartBtn.addEventListener('click', () => cartPanel.classList.remove('active'));
   }
 
-  // --- 02.3 Handler para Sistema de Favoritos (Restringido) ---
-  if (favBtn) {
+  if (favBtn && favPanel && closeFavBtn) {
     favBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      alert("SYS.OP // ADVERTENCIA: MÓDULO DE FAVORITOS ENCRIPTADO. DESBLOQUEO PENDIENTE.");
+      favPanel.classList.add('active');
+      if (cartPanel) cartPanel.classList.remove('active'); // Apaga Carrito
     });
+    closeFavBtn.addEventListener('click', () => favPanel.classList.remove('active'));
   }
 
 
@@ -520,7 +525,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderCatalogGrid(dataToRender) {
       catalogGrid.innerHTML = '';
-
       const archiveItems = dataToRender.length > 5 ? dataToRender.slice(5) : dataToRender;
 
       if (archiveItems.length === 0) {
@@ -528,10 +532,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      // Detectar qué obras ya son favoritas al renderizar
+      let currentFavs = JSON.parse(localStorage.getItem('vh_fav_items')) || [];
+
       archiveItems.forEach(product => {
         const isNew = product.status === 'NUEVO' ? '<span style="color:var(--dark); font-family:var(--font-tech); font-weight:bold; font-size: 0.9rem; position:absolute; top:10px; left:10px; background:var(--primary); padding:5px 10px; z-index:20;">NUEVO</span>' : '';
+        const isFav = currentFavs.some(f => f.id === product.id) ? 'is-fav' : '';
 
-        // ESTRUCTURA PLANA PURGADA DE CÓDIGO FANTASMA
         catalogGrid.innerHTML += `
         <div class="product-card">
             <div class="card-header"><span class="serial">${product.id}</span><span class="status-dot"></span></div>
@@ -544,33 +551,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="product-info">
                 <h3 title="${product.title}">${product.title}</h3><p class="price">$${product.price.toFixed(2)}</p>
-                <button class="add-btn" data-id="${product.id}" data-target="true">AÑADIR AL SISTEMA</button>
+
+                <div style="display: flex; gap: 10px; margin-top: auto;">
+                  <button class="add-btn" data-id="${product.id}" data-target="true" style="flex: 3;">AÑADIR AL SISTEMA</button>
+                  <button class="fav-card-btn ${isFav}" data-id="${product.id}" data-target="true" title="Favoritos" style="flex: 1; background: transparent; border: 1px solid #555; color: #888; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.3s; border-radius: 2px;">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                  </button>
+                </div>
             </div>
         </div>`;
       });
 
-      attachCartAddLogic();
+      attachCardButtonsLogic();
       if (typeof attachModalLogic === 'function') attachModalLogic();
     }
 
-    function attachCartAddLogic() {
+    // --- LÓGICA DE BOTONES DE TARJETA Y PANEL DE FAVORITOS ---
+    function attachCardButtonsLogic() {
+      // Lógica Carrito Original
       document.querySelectorAll('.add-btn').forEach(button => {
         button.addEventListener('click', () => {
           const productData = artDatabase.find(p => p.id === button.getAttribute('data-id'));
+          if (productData) { cart.push(productData); updateCartUI(); }
 
-          if (productData) {
-            cart.push(productData);
-            updateCartUI();
-          }
-
-          const card = button.closest('.product-card');
           const originalText = button.textContent;
-
           button.textContent = 'DATOS GUARDADOS';
           button.style.backgroundColor = '#FFF';
           button.style.color = '#000';
 
-          if (cartPanel) cartPanel.classList.add('active');
+          if (cartPanel) { cartPanel.classList.add('active'); if (favPanel) favPanel.classList.remove('active'); }
 
           setTimeout(() => {
             button.textContent = originalText;
@@ -578,6 +587,88 @@ document.addEventListener('DOMContentLoaded', () => {
             button.style.color = 'var(--text-light)';
           }, 1000);
         });
+      });
+
+      // Nueva Lógica Favoritos
+      document.querySelectorAll('.fav-card-btn').forEach(button => {
+        button.addEventListener('click', () => {
+          let favorites = JSON.parse(localStorage.getItem('vh_fav_items')) || [];
+          const productId = button.getAttribute('data-id');
+          const isCurrentlyFav = favorites.some(f => f.id === productId);
+
+          if (isCurrentlyFav) {
+            favorites = favorites.filter(f => f.id !== productId);
+            button.classList.remove('is-fav');
+          } else {
+            const productData = artDatabase.find(p => p.id === productId);
+            if (productData) {
+              favorites.push(productData);
+              button.classList.add('is-fav');
+            }
+          }
+
+          localStorage.setItem('vh_fav_items', JSON.stringify(favorites));
+          updateFavUI();
+
+          if (favPanel) { favPanel.classList.add('active'); if (cartPanel) cartPanel.classList.remove('active'); }
+        });
+      });
+    }
+
+    function updateFavUI() {
+      let favorites = JSON.parse(localStorage.getItem('vh_fav_items')) || [];
+
+      // --- FIX TÁCTICO: Actualizar el contador numérico rojo en la barra superior ---
+      const favBadge = document.getElementById('favCountBadge');
+      if (favBadge) {
+        favBadge.textContent = favorites.length;
+      }
+      // -----------------------------------------------------------------------------
+
+      const favItemsContainer = document.getElementById('favItemsContainer');
+      if (!favItemsContainer) return;
+
+      favItemsContainer.innerHTML = '';
+
+      if (favorites.length === 0) {
+        favItemsContainer.innerHTML = '<p style="color:#AAA; font-family:var(--font-tech); margin-top:20px; text-transform:uppercase; letter-spacing: 1px;">SISTEMA VACÍO</p>';
+        return;
+      }
+
+      favorites.forEach(product => {
+        favItemsContainer.innerHTML += `
+            <div class="cart-item">
+                <img src="${product.image}" alt="${product.title}">
+                <div class="cart-item-info">
+                    <h4 style="color: #FF003C;">${product.title}</h4>
+                    <p style="font-family: var(--font-tech); font-size: 0.8rem; color: #888;">SERIAL: ${product.id}</p>
+                </div>
+                <button class="remove-fav-btn" data-id="${product.id}" style="background:none; border:none; color:#666; font-family:var(--font-tech); font-size:0.75rem; text-decoration:underline; cursor:pointer;">Remover</button>
+            </div>
+        `;
+      });
+
+      document.querySelectorAll('.remove-fav-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          favorites = favorites.filter(item => item.id !== id);
+          localStorage.setItem('vh_fav_items', JSON.stringify(favorites));
+          updateFavUI();
+
+          const cardBtn = document.querySelector(`.fav-card-btn[data-id="${id}"]`);
+          if (cardBtn) cardBtn.classList.remove('is-fav');
+        });
+      });
+    }
+
+    // Purgar sistema Favoritos
+    const btnVaciarFavs = document.getElementById('btn-vaciar-favs');
+    if (btnVaciarFavs) {
+      if (typeof attachCursorHover === 'function') attachCursorHover([btnVaciarFavs]);
+      btnVaciarFavs.addEventListener('click', () => {
+        localStorage.setItem('vh_fav_items', JSON.stringify([]));
+        updateFavUI();
+        document.querySelectorAll('.fav-card-btn').forEach(b => b.classList.remove('is-fav'));
       });
     }
 
@@ -819,20 +910,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape') {
       if (sideMenu && sideMenu.classList.contains('active')) sideMenu.classList.remove('active');
       if (cartPanel && cartPanel.classList.contains('active')) cartPanel.classList.remove('active');
+      if (favPanel && favPanel.classList.contains('active')) favPanel.classList.remove('active'); // Nuevo
       if (modal && modal.classList.contains('active')) {
         modal.classList.remove('active');
-        // FIX TÁCTICO: Apagar el motor 3D si el usuario escapa con el teclado
-        if (is3DModeActive && btnModo3D) {
-          btnModo3D.click();
-        }
+        if (is3DModeActive && btnModo3D) btnModo3D.click();
       }
     }
   });
 
-
   /* ==========================================================================
      08. FINALIZACIÓN Y VERIFICACIÓN POST-CARGA
      ========================================================================== */
-  updateCartUI(); // Verificación redundante por seguridad de renderizado
-
+  updateCartUI();
+  if (typeof updateFavUI === 'function') updateFavUI(); // Arrancar motor de favoritos
 });
